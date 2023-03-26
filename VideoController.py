@@ -18,7 +18,7 @@ class video_controller(object):
         self.set_video_player()
 
     def init_video_info(self):
-        videoinfo = opencv_engine.getvideoinfo(self.video_path)
+        videoinfo = opencv_engine.get_video_info(self.video_path)
         self.vc = videoinfo["vc"]
         self.video_fps = videoinfo["fps"]
         self.video_total_frame_count = videoinfo["frame_count"]
@@ -41,7 +41,7 @@ class video_controller(object):
     def get_next_frame(self):
         ret, frame = self.vc.read()
         self.ui.label_frameinfo.setText(f"frame number: {self.current_frame_no}/{self.video_total_frame_count}")
-        self.set_slider_value(self.current_frame_no)
+        self.set_slider_value()
         return frame
 
     def update_label_frame(self, frame):       
@@ -65,25 +65,28 @@ class video_controller(object):
 
     def pause(self):
         self.videoplayer_state = "pause"
+    
+    def forward(self):
+        self.videoplayer_state = "forward"
+
+    def rewind(self):
+        self.videoplayer_state = "rewind"
 
     def timer_timeout(self):
         if (self.videoplayer_state == "play"):
             ### 若已經播映完畢
             if self.current_frame_no >= self.video_total_frame_count-1:
-                print("11111")
-                self.videoplayer_state = "pause" # 從頭開始replay
-                self.current_frame_no = 0 
+                self.videoplayer_state = "stop"
+                self.current_frame_no = 0  # 從頭開始replay
                 self.set_current_frame_no(self.current_frame_no)
             ### 若遇到選擇的interrupt結束時
             elif self.current_frame_no == self.end_choose_interrupt_frame:
-                print("22222")
                 self.videoplayer_state = "pause"
                 self.current_frame_no = self.end_choose_interrupt_frame
                 self.set_current_frame_no(self.current_frame_no)
                 self.end_choose_interrupt_frame = -1 # 結束此次interrupt選取->將end_choose_interrupt_frame reset
             ### 若播映中
             else:
-                print("33333")
                 self.current_frame_no += 1
 
         if (self.videoplayer_state == "stop"):
@@ -92,6 +95,14 @@ class video_controller(object):
 
         if (self.videoplayer_state == "pause"):
             self.current_frame_no = self.current_frame_no
+            self.set_current_frame_no(self.current_frame_no)
+
+        if self.videoplayer_state == "forward":
+            self.current_frame_no += self.video_fps*5
+            self.set_current_frame_no(self.current_frame_no)
+
+        if self.videoplayer_state == "rewind":
+            self.current_frame_no -= self.video_fps*5 
             self.set_current_frame_no(self.current_frame_no)
 
         frame = self.get_next_frame()
@@ -103,11 +114,3 @@ class video_controller(object):
 
     def set_slider_value(self):
         self.ui.slider_videoframe.setValue(self.current_frame_no)
-
-
-
-
-
-
-
-

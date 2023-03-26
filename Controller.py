@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from UI import Ui_MainWindow
 from File import Video_File
-from Utils import judge
+from Utils import judge, compute
 from VideoController import video_controller
 import cv2 as cv 
 import os
@@ -66,8 +66,14 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         ##### Step1. show result in list widget #####
         # 將interrupt frame加入list widget裡
         for i in range(self.video_file.total_interrupt_count):
-            self.ui.list_widget_interrupt.addItem(str(self.video_file.interrupt_list[i]["start_frame"]) + " - " + str(self.video_file.interrupt_list[i]["end_frame"]))
-        
+            start_normal_time = compute.get_normal_time_info(time_in_seconds=self.video_file.interrupt_list[i]["start_time"])
+            start_time_name = str(start_normal_time["minute"]).zfill(2) + ": " + str(start_normal_time["second"]).zfill(2)
+
+            end_normal_time = compute.get_normal_time_info(time_in_seconds=self.video_file.interrupt_list[i]["end_time"])
+            end_time_name = str(end_normal_time["minute"]).zfill(2) + ": " + str(end_normal_time["second"]).zfill(2)
+
+            self.ui.list_widget_interrupt.addItem(start_time_name + " - " + end_time_name)
+            # list widget內item的形式為: 3270 - 3295
 
         ##### Step2. show video in video player #####
         self.video_path = self.video_file.filepath
@@ -75,15 +81,30 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.ui.button_play.clicked.connect(self.video_controller.play) # connect to function()
         self.ui.button_stop.clicked.connect(self.video_controller.stop)
         self.ui.button_pause.clicked.connect(self.video_controller.pause)
+        self.ui.button_forward.clicked.connect(self.video_controller.forward)
+        self.ui.button_rewind.clicked.connect(self.video_controller.rewind)
     
     def interrupt_choose(self):
 
-        ##### Step1. 取初選取到的interrupt
+        ##### Step1. 取出選取到的interrupt
         item = self.ui.list_widget_interrupt.currentItem().text()
         choose_frame = re.findall(r"\d+", item) # 從string中抓出數字的部分
-        print(type(choose_frame))
-        start_choose_frame = int(choose_frame[0])
-        end_choose_frame = int(choose_frame[1])
+            # choose_frame = [
+            #     start interrupt minute,
+            #     start interrupt second,
+            #     end interrupt minute,
+            #     end interrupt second,
+            # ]
+
+        start_normal_time = {}
+        start_normal_time["minute"] = int(choose_frame[0])
+        start_normal_time["second"] = int(choose_frame[1])
+        start_choose_frame = compute.get_frame_num(start_normal_time, self.video_file.cap.get(cv.CAP_PROP_FPS))
+
+        end_normal_time = {}
+        end_normal_time["minute"] = int(choose_frame[2])
+        end_normal_time["second"] = int(choose_frame[3])
+        end_choose_frame = compute.get_frame_num(end_normal_time, self.video_file.cap.get(cv.CAP_PROP_FPS))
 
         ##### Step2. 播映interrupt開始的地方
         self.video_controller.pause()   # 先讓影片不播映->按下play再開始

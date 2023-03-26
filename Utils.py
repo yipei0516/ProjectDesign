@@ -3,7 +3,7 @@ import cv2 as cv
 class opencv_engine(object):
 
     @staticmethod
-    def getvideoinfo(video_path): 
+    def get_video_info(video_path): 
         videoinfo = {} # !!!!! dictionary !!!!!
         vc = cv.VideoCapture(video_path)
         videoinfo["vc"] = vc    # 影片片段
@@ -14,8 +14,16 @@ class opencv_engine(object):
         return videoinfo
         
 class compute(object):
-    def get_normal_time_info():
-        minute = 0
+    def get_normal_time_info(time_in_seconds):
+        normal_time = {}
+        normal_time["minute"] = (int)(time_in_seconds/60)
+        normal_time["second"] = (int)(round(time_in_seconds - 60*normal_time["minute"], 0))
+        return normal_time
+    
+    def get_frame_num(time_in_normal_time, fps):
+        time_in_seconds = time_in_normal_time["minute"]*60 + time_in_normal_time["second"]
+        frame_num = time_in_seconds * fps
+        return frame_num
 
 class judge(object):
 
@@ -67,9 +75,9 @@ class judge(object):
                     #     else:
                     #         gb_dominate_pixels += 1
                     bg_max = max(b[i, j], g[i, j])
-                    if(bg_max >= r[i, j] and (b[i,j] > g[i,j] and (int)(b[i,j]) - int(r[i, j]) <= 30) ):
-                        print("[", " s","]", end=" ")
-                    elif(r[i, j] > bg_max):
+                    # if(bg_max >= r[i, j] and (b[i,j] > g[i,j] and (int)(b[i,j]) - int(r[i, j]) <= 30) ):
+                    #     print("[", " s","]", end=" ")
+                    if(r[i, j] > bg_max):
                         print("[", " r","]", end=" ")
                         r_dominate_pixels += 1
                     else:
@@ -92,7 +100,7 @@ class judge(object):
                         tmp_count_frame += 1
                         count_frame += 1
                     elif(tmp_flag == True) and (tmp_count_frame >= 20):
-                        if(count_frame - tmp_count_frame >= 8):
+                        if(count_frame - tmp_count_frame >= 10):
                             end_flag = True
                         else:
                             count_frame = 0

@@ -18,5 +18,4 @@
 2. UI：看能不能好幾個video file同時測
 3. 匯入file的資料還沒改（rgb數值之類的）
 4. 匯入excel的資料還沒改（分成兩部分：known & unknown）
-5. 給user看的東西要是normal time（目前是frame，還沒改）→eg. 08: 26
-6. 最後美觀再說
+5. 最後美觀再說

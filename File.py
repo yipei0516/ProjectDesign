@@ -1,6 +1,7 @@
 import numpy as np
 import openpyxl
 import os
+from Utils import compute
 
 class Video_File:
     def __init__(self, filepath, filename , cap):
@@ -44,24 +45,19 @@ class Video_File:
         resultFile.write("Interrupt Record Frame and Time: \n")
 
         for i in range(self.total_interrupt_count):
-            start_minute = 0
-            start_second = 0
-            start_minute = (int)(self.interrupt_list[i]["start_time"]/60)
-            start_second = (round(self.interrupt_list[i]["start_time"] - 60*start_minute, 0))
-            end_minute = 0
-            end_second = 0
-            end_minute = (int)(self.interrupt_list[i]["end_time"]/60)
-            end_second = (round(self.interrupt_list[i]["end_time"] - 60*end_minute, 0))
+            start_normal_time = compute.get_normal_time_info(time_in_seconds=self.interrupt_list[i]["start_time"])
+            end_normal_time = compute.get_normal_time_info(time_in_seconds=self.interrupt_list[i]["end_time"])
 
-            resultFile.write("\tInterrupt#" + str(i) + "\t\t" + str(self.interrupt_list[i]["start_time"]) + 
-                             "\t\t(" + str(start_minute) + ": " + str(start_second) + ")" + 
-                             "\t\t" + str(self.interrupt_list[i]["end_time"]) +
-                             "\t\t(" + str(end_minute) + ": " + str(end_second) + ")\n")
+            resultFile.write("\tInterrupt#" + str(i) + 
+                             "\t\t" + str(self.interrupt_list[i]["start_frame"]) + 
+                             "\t\t(" + str(start_normal_time["minute"]).zfill(2) + ": " + str(start_normal_time["second"]).zfill(2) + ")" + 
+                             "\t\t" + str(self.interrupt_list[i]["end_frame"]) +
+                             "\t\t(" + str(end_normal_time["minute"]).zfill(2) + ": " + str(end_normal_time["second"]).zfill(2) + ")\n")
 
     def write_result_to_excel(self): ## write result to excel ##
         
         name = self.filename
-        wb = openpyxl.load_workbook('./Result.xlsx')
+        wb = openpyxl.load_workbook('Result.xlsx')
         ws1 = wb.create_sheet(name)
         ws1['A1'].value = name
         ws1['B1'].value = 'Start Frame #'
@@ -73,18 +69,16 @@ class Video_File:
             interrupt_name = 'Interrupt#' + str(i)
             
             ##### interrupt start #####
-            start_minute = (int)(self.interrupt_list[i]["start_time"]/60)
-            start_second = (round(self.interrupt_list[i]["start_time"] - 60*start_minute, 0))
-            start_time_name = str(start_minute) + ": " + str(start_second)
             start_frame_name = str(self.interrupt_list[i]["start_frame"])
+            start_normal_time = compute.get_normal_time_info(time_in_seconds=self.interrupt_list[i]["start_time"])
+            start_time_name = str(start_normal_time["minute"]).zfill(2) + ": " + str(start_normal_time["second"]).zfill(2)
 
             ##### interrupt end #####
-            end_minute = (int)(self.interrupt_list[i]["end_time"]/60)
-            end_second = (round(self.interrupt_list[i]["end_time"] - 60*end_minute, 0))
-            end_time_name = str(end_minute) + ": " + str(end_second)
             end_frame_name = str(self.interrupt_list[i]["end_frame"])
+            end_normal_time = compute.get_normal_time_info(time_in_seconds=self.interrupt_list[i]["end_time"])
+            end_time_name = str(end_normal_time["minute"]).zfill(2) + ": " + str(end_normal_time["second"]).zfill(2)
 
             data = [interrupt_name, start_frame_name, start_time_name, end_frame_name, end_time_name]
             ws1.append(data)
 
-        wb.save('./Result.xlsx')
+        wb.save('Result.xlsx')
