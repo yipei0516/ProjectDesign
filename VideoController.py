@@ -98,11 +98,18 @@ class video_controller(object):
             self.set_current_frame_no(self.current_frame_no)
 
         if self.videoplayer_state == "forward":
+            self.videoplayer_state = "play"
             self.current_frame_no += self.video_fps*5
+            if self.current_frame_no >= self.video_total_frame_count-1: # 往前 若已經超過總幀數的話
+                self.current_frame_no = self.video_total_frame_count-1 # 停在最後面
             self.set_current_frame_no(self.current_frame_no)
+            
 
         if self.videoplayer_state == "rewind":
-            self.current_frame_no -= self.video_fps*5 
+            self.videoplayer_state = "play"
+            self.current_frame_no -= self.video_fps*5
+            if self.current_frame_no < 0: # 往後 若已經小於第一幀的話
+                self.current_frame_no = 0
             self.set_current_frame_no(self.current_frame_no)
 
         frame = self.get_next_frame()

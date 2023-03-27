@@ -14,8 +14,7 @@
 
 
 # 需要再做的：
-1. UI：到退5秒、前進5秒
-2. UI：看能不能好幾個video file同時測
-3. 匯入file的資料還沒改（rgb數值之類的）
-4. 匯入excel的資料還沒改（分成兩部分：known & unknown）
-5. 最後美觀再說
+1. UI：看能不能好幾個video file同時測
+2. 匯入file的資料還沒改（rgb數值之類的）
+3. 匯入excel的資料還沒改（分成兩部分：known & unknown）
+4. 最後美觀再說
