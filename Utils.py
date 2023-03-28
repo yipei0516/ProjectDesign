@@ -27,7 +27,7 @@ class compute(object):
 
 class judge(object):
 
-    def start_judge(file):
+    def start_judge(file, cap):
         ## parameter setting ##
         limit = 20      # count_frame的上限 = fake_count的上限 = 20
 
@@ -50,22 +50,26 @@ class judge(object):
             r_dominate_pixels = 0
             gb_dominate_pixels = 0
 
-            ret, frame = file.cap.read()            # 讀取影片的每一幀
+            ret, frame = cap.read()            # 讀取影片的每一幀
             if not ret:
                 print("Cannot receive frame")       # 如果讀取錯誤，印出訊息
                 break
 
-            cv.namedWindow('BGRValue', 1)
-            cv.resizeWindow('BGRValue', 300, 300)
             cv.imshow('BGRValue', frame)            # 如果讀取成功，顯示該幀的畫面
 
             
             image = cv.resize(frame, (32, 18))
             b,g,r = cv.split(image)
-            # print("Now Frame: ", frame_no)
+            file.resultFile.write("Now Frame: " + str(frame_no) + "\n")
 
             for i in range(18):
-                for j in range(6,25):
+                for j in range(6,26):
+                    bgr_value_str = "[%4d" % b[i,j] + "%4d" % g[i,j] + "%4d] " % r[i,j]
+                    file.resultFile.write(bgr_value_str)
+                file.resultFile.write("\n")
+
+            for i in range(18):
+                for j in range(6,26):
                     # judge pixel who domiante
                     # if(b[i, j] == r[i, j]) or (g[i, j] == r[i, j]):         # 排除白、黑、灰(r[]=g[]=b[])
                     #     valid_element = valid_element - 1
@@ -75,18 +79,19 @@ class judge(object):
                     #     else:
                     #         gb_dominate_pixels += 1
                     bg_max = max(b[i, j], g[i, j])
-                    # if(bg_max >= r[i, j] and (b[i,j] > g[i,j] and (int)(b[i,j]) - int(r[i, j]) <= 30) ):
-                    #     print("[", " s","]", end=" ")
+                    average = ((int)(b[i, j]) + (int)(g[i, j]) + (int)(r[i, j])) / 3
                     if(r[i, j] > bg_max):
-                        print("[", " r","]", end=" ")
+                        file.resultFile.write("[  r ] ")
                         r_dominate_pixels += 1
+                    elif(abs(average - (int)(r[i, j])) < 12 and abs(average - (int)(b[i, j])) < 12 and abs(average - (int)(g[i, j])) < 12):
+                        file.resultFile.write("[  s ] ")
                     else:
-                        print("[", "gb","]", end=" ")
+                        file.resultFile.write("[ gb ] ")
                         gb_dominate_pixels += 1
-                print()
-                    
-            print("r_dominate_pixels = ", r_dominate_pixels)
-            print("gb_dominate_pixels = ", gb_dominate_pixels)
+                file.resultFile.write("\n")
+            
+            file.resultFile.write("r_dominate_pixels = " + str(r_dominate_pixels) + "\n")
+            file.resultFile.write("gb_dominate_pixels = " + str(gb_dominate_pixels) + "\n")
 
             if(gb_dominate_pixels >= r_dominate_pixels) :    # 在鼻孔外面
                 count_flag = True
@@ -116,12 +121,12 @@ class judge(object):
                         count_frame = 0
                         count_flag = False
 
-            print("tmp_flag = ", tmp_flag)
-            print("tmp_count_frame = ", tmp_count_frame)
-            print("count_flag = ", count_flag)
-            print("count_frame = ", count_frame)
-            print("end_flag = ", end_flag)
-            print("\n")
+            file.resultFile.write("tmp_flag = " + str(tmp_flag) + "\n")
+            file.resultFile.write("tmp_count_frame = " + str(tmp_count_frame) + "\n")
+            file.resultFile.write("count_flag = " + str(count_flag) + "\n")
+            file.resultFile.write("count_frame = " + str(count_frame) + "\n")
+            file.resultFile.write("end_flag = " + str(end_flag) + "\n")
+            file.resultFile.write("\n")
             
             # 如果連續30偵判斷在鼻外  -->  手術中斷
             if(count_frame >= 30):
@@ -155,6 +160,6 @@ class judge(object):
                 break
         
         # !!!!! 目前為了後續檢查interrupt所以不能release !!!!!
-        # file.cap.release()                    # 所有作業都完成後，釋放資源
+        cap.release()                    # 所有作業都完成後，釋放資源
         cv.destroyAllWindows()                  # 結束所有視窗
         

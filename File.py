@@ -4,13 +4,13 @@ import os
 from Utils import compute
 
 class Video_File:
-    def __init__(self, filepath, filename , cap):
+    def __init__(self, filepath, filename):
         self.filepath = filepath
         self.filename = filename
-        self.cap = cap
         self.total_interrupt_count = 0
 
         self.interrupt_list = [] 
+        self.resultFile = open(self.filename + ".txt", "w")
         # list裡面為的東西為dictionary(包含：start time、end time等等)
         # interrupt_list = [ 第一個interrupt_info, 第二個interrupt_info, 第三個interrupt_info .....]
         # interrupt_list[0] = interrupt_info = {
@@ -34,21 +34,17 @@ class Video_File:
         
 
     def write_result_to_file(self): ## write result to file ##
-        basename = os.path.basename(self.filepath)
-        self.filename = os.path.splitext(basename)[0]
-        print("basename", basename)
-        print("filename", self.filename)
-        fileStr = self.filename + ".txt"
-        resultFile = open(fileStr, "w")
-        resultFile.write("Video Num:  " + self.filename + "\n")
-        resultFile.write("Total interrupt count: " + str(self.total_interrupt_count) + "\n")
-        resultFile.write("Interrupt Record Frame and Time: \n")
+        # fileStr = self.filename + ".txt"
+        # self.resultFile = open(fileStr, "w")
+        self.resultFile.write("Video Num:  " + self.filename + "\n")
+        self.resultFile.write("Total interrupt count: " + str(self.total_interrupt_count) + "\n")
+        self.resultFile.write("Interrupt Record Frame and Time: \n")
 
         for i in range(self.total_interrupt_count):
             start_normal_time = compute.get_normal_time_info(time_in_seconds=self.interrupt_list[i]["start_time"])
             end_normal_time = compute.get_normal_time_info(time_in_seconds=self.interrupt_list[i]["end_time"])
 
-            resultFile.write("\tInterrupt#" + str(i) + 
+            self.resultFile.write("\tInterrupt#" + str(i) + 
                              "\t\t" + str(self.interrupt_list[i]["start_frame"]) + 
                              "\t\t(" + str(start_normal_time["minute"]).zfill(2) + ": " + str(start_normal_time["second"]).zfill(2) + ")" + 
                              "\t\t" + str(self.interrupt_list[i]["end_frame"]) +

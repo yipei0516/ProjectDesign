@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from UI import Ui_MainWindow
 from File import Video_File
-from Utils import judge, compute
+from Utils import judge, compute, opencv_engine
 from VideoController import video_controller
 import cv2 as cv 
 import os
@@ -26,15 +26,22 @@ class MainWindow_controller(QtWidgets.QMainWindow):
     ### load video into FileDialog
     def clicked_choose_video(self):
         filepath, filetype = QtWidgets.QFileDialog.getOpenFileName()
-        cap = cv.VideoCapture(filepath)
-        if not cap.isOpened():
+        
+        videoinfo = opencv_engine.get_video_info(filepath)
+        self.vc = videoinfo["vc"]
+        self.video_fps = videoinfo["fps"]
+        self.video_total_frame_count = videoinfo["frame_count"]
+        self.video_width = videoinfo["width"]
+        self.video_height = videoinfo["height"]
+
+        if not self.vc.isOpened():
             print("Cannot open camera")
             exit()
         basename = os.path.basename(filepath)
         filename = os.path.splitext(basename)[0]                                    # 只取出檔案名字([1]為副檔名)
         self.ui.label_video_name.setText("Video Name:   " + filename)
         
-        self.video_file = Video_File(filepath=filepath, filename=filename, cap=cap) # 創一個Video_File class叫做file!!!!!!!!!!!!!
+        self.video_file = Video_File(filepath=filepath, filename=filename) # 創一個Video_File class叫做file!!!!!!!!!!!!!
         
 
     
@@ -42,7 +49,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
     def clicked_start_judge(self):
         
         ##### Step1. start judge #####
-        judge.start_judge(file=self.video_file)
+        judge.start_judge(file=self.video_file, cap=self.vc)
 
         ##### Step2. write result to file #####
         self.video_file.write_result_to_file()    
@@ -99,12 +106,12 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         start_normal_time = {}
         start_normal_time["minute"] = int(choose_frame[0])
         start_normal_time["second"] = int(choose_frame[1])
-        start_choose_frame = compute.get_frame_num(start_normal_time, self.video_file.cap.get(cv.CAP_PROP_FPS))
+        start_choose_frame = compute.get_frame_num(start_normal_time, self.video_fps)
 
         end_normal_time = {}
         end_normal_time["minute"] = int(choose_frame[2])
         end_normal_time["second"] = int(choose_frame[3])
-        end_choose_frame = compute.get_frame_num(end_normal_time, self.video_file.cap.get(cv.CAP_PROP_FPS))
+        end_choose_frame = compute.get_frame_num(end_normal_time, self.video_fps)
 
         ##### Step2. 播映interrupt開始的地方
         self.video_controller.pause()   # 先讓影片不播映->按下play再開始
