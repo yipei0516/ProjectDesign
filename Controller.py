@@ -22,6 +22,29 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.ui.button_start_judge.clicked.connect(self.clicked_start_judge)
         self.ui.button_check_result.clicked.connect(self.show_video)
         self.ui.list_widget_interrupt.itemDoubleClicked.connect(self.interrupt_choose) # 選取interrupt時
+        
+
+    # def setup_image(self):
+    #     play_image = "./image/play.png"
+    #     self.ui.button_play.setIcon(QtGui.QIcon(play_image))
+    #     self.ui.button_play.setIconSize(QtCore.QSize(60,60))
+    #     self.ui.button_play.setStyleSheet("border :0px solid ;")
+    #     play_image = "./image/pause.png"
+    #     self.ui.button_pause.setIcon(QtGui.QIcon(play_image))
+    #     self.ui.button_pause.setIconSize(QtCore.QSize(60,60))
+    #     self.ui.button_pause.setStyleSheet("border :0px solid ;")
+    #     play_image = "./image/stop.png"
+    #     self.ui.button_stop.setIcon(QtGui.QIcon(play_image))
+    #     self.ui.button_stop.setIconSize(QtCore.QSize(60,60))
+    #     self.ui.button_stop.setStyleSheet("border :0px solid ;")
+    #     play_image = "./image/forward.png"
+    #     self.ui.button_forward.setIcon(QtGui.QIcon(play_image))
+    #     self.ui.button_forward.setIconSize(QtCore.QSize(60,60))
+    #     self.ui.button_forward.setStyleSheet("border :0px solid ;")
+    #     play_image = "./image/rewind.png"
+    #     self.ui.button_rewind.setIcon(QtGui.QIcon(play_image))
+    #     self.ui.button_rewind.setIconSize(QtCore.QSize(60,60))
+    #     self.ui.button_rewind.setStyleSheet("border :0px solid ;")
 
     
     ### load video into FileDialog
@@ -67,8 +90,6 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.wrongJudgeTimes = 0        # 目前沒這個資訊
         self.accuracy = 0               # 有了total_interrupt_count跟wrongJudgeTimes就可算accuracy
         self.ui.label_interrupt_times.setText("Interrupt Times:   " + str(self.video_file.total_interrupt_count))
-        self.ui.label_wrong_judge_times.setText("Wrong Judge Times:   " + str(self.wrongJudgeTimes))
-        self.ui.label_accuracy.setText("Accuracy:   " + str(self.accuracy))
 
 
 
@@ -92,6 +113,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.video_controller = video_controller(video_path=self.video_path, ui=self.ui)
         self.ui.button_play.clicked.connect(self.video_controller.play) # connect to function()
         self.ui.button_stop.clicked.connect(self.video_controller.stop)
+        # self.ui.button_stop.setStyleSheet()
         self.ui.button_pause.clicked.connect(self.video_controller.pause)
         self.ui.button_forward.clicked.connect(self.video_controller.forward)
         self.ui.button_rewind.clicked.connect(self.video_controller.rewind)

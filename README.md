@@ -15,5 +15,6 @@
 
 # 需要再做的：
 1. UI：看能不能好幾個video file同時測
-2. 匯入excel的資料還沒改（分成兩部分：known & unknown）
+2. 匯入excel的資料還沒改（分成兩部分：known & unknown）$
 3. 最後美觀再說
+@

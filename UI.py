@@ -15,96 +15,176 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
-        MainWindow.resize(1551, 852)
+        MainWindow.resize(1500, 850)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.button_start_judge = QtWidgets.QPushButton(self.centralwidget)
-        self.button_start_judge.setGeometry(QtCore.QRect(10, 130, 220, 60))
+        self.button_start_judge.setGeometry(QtCore.QRect(150, 140, 220, 60))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
         font.setPointSize(14)
         font.setBold(True)
         font.setWeight(75)
         self.button_start_judge.setFont(font)
+        self.button_start_judge.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgb(190, 184, 171);\n"
+"border: 0px solid;\n"
+"")
         self.button_start_judge.setObjectName("button_start_judge")
         self.button_choose_video = QtWidgets.QPushButton(self.centralwidget)
-        self.button_choose_video.setGeometry(QtCore.QRect(10, 60, 220, 60))
+        self.button_choose_video.setGeometry(QtCore.QRect(150, 60, 220, 60))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
         font.setPointSize(14)
         font.setBold(True)
         font.setWeight(75)
         self.button_choose_video.setFont(font)
+        self.button_choose_video.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgb(190, 184, 171);\n"
+"border: 0px solid;\n"
+"")
         self.button_choose_video.setObjectName("button_choose_video")
         self.label_video_name = QtWidgets.QLabel(self.centralwidget)
-        self.label_video_name.setGeometry(QtCore.QRect(250, 40, 330, 30))
+        self.label_video_name.setGeometry(QtCore.QRect(60, 309, 380, 50))
         font = QtGui.QFont()
-        font.setFamily("Candara")
-        font.setPointSize(18)
+        font.setFamily("Arial Black")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
         self.label_video_name.setFont(font)
         self.label_video_name.setScaledContents(True)
+        self.label_video_name.setWordWrap(True)
         self.label_video_name.setObjectName("label_video_name")
         self.label_interrupt_times = QtWidgets.QLabel(self.centralwidget)
-        self.label_interrupt_times.setGeometry(QtCore.QRect(250, 90, 380, 50))
+        self.label_interrupt_times.setGeometry(QtCore.QRect(60, 370, 380, 50))
         font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(18)
+        font.setFamily("Arial Black")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
         self.label_interrupt_times.setFont(font)
         self.label_interrupt_times.setScaledContents(True)
+        self.label_interrupt_times.setWordWrap(True)
         self.label_interrupt_times.setObjectName("label_interrupt_times")
-        self.label_accuracy = QtWidgets.QLabel(self.centralwidget)
-        self.label_accuracy.setGeometry(QtCore.QRect(250, 230, 380, 50))
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(18)
-        self.label_accuracy.setFont(font)
-        self.label_accuracy.setScaledContents(True)
-        self.label_accuracy.setObjectName("label_accuracy")
-        self.label_wrong_judge_times = QtWidgets.QLabel(self.centralwidget)
-        self.label_wrong_judge_times.setGeometry(QtCore.QRect(250, 160, 380, 50))
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(18)
-        self.label_wrong_judge_times.setFont(font)
-        self.label_wrong_judge_times.setScaledContents(True)
-        self.label_wrong_judge_times.setObjectName("label_wrong_judge_times")
         self.list_widget_interrupt = QtWidgets.QListWidget(self.centralwidget)
-        self.list_widget_interrupt.setGeometry(QtCore.QRect(50, 330, 431, 471))
+        self.list_widget_interrupt.setGeometry(QtCore.QRect(50, 460, 430, 351))
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setBold(True)
+        font.setWeight(75)
+        self.list_widget_interrupt.setFont(font)
         self.list_widget_interrupt.setObjectName("list_widget_interrupt")
         self.button_play = QtWidgets.QPushButton(self.centralwidget)
-        self.button_play.setGeometry(QtCore.QRect(1410, 690, 113, 32))
+        self.button_play.setGeometry(QtCore.QRect(920, 670, 60, 60))
+        self.button_play.setStyleSheet("QPushButton {\n"
+"        border: 0px solid;\n"
+"    }\n"
+"QPushButton:hover {\n"
+"        background-color: rgb(223, 223, 223);\n"
+"    }\n"
+"")
+        self.button_play.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("image/play.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_play.setIcon(icon)
+        self.button_play.setIconSize(QtCore.QSize(60, 60))
         self.button_play.setObjectName("button_play")
         self.button_pause = QtWidgets.QPushButton(self.centralwidget)
-        self.button_pause.setGeometry(QtCore.QRect(1070, 690, 113, 32))
+        self.button_pause.setGeometry(QtCore.QRect(1050, 670, 60, 60))
+        self.button_pause.setStyleSheet("QPushButton {\n"
+"        border: 0px solid;\n"
+"    }\n"
+"QPushButton:hover {\n"
+"        background-color: rgb(223, 223, 223);\n"
+"    }\n"
+"")
+        self.button_pause.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("image/pause.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_pause.setIcon(icon1)
+        self.button_pause.setIconSize(QtCore.QSize(60, 60))
         self.button_pause.setObjectName("button_pause")
         self.label_videoplayer = QtWidgets.QLabel(self.centralwidget)
-        self.label_videoplayer.setGeometry(QtCore.QRect(690, 120, 800, 450))
+        self.label_videoplayer.setGeometry(QtCore.QRect(610, 110, 800, 450))
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_videoplayer.setFont(font)
         self.label_videoplayer.setFrameShape(QtWidgets.QFrame.WinPanel)
+        self.label_videoplayer.setTextFormat(QtCore.Qt.AutoText)
+        self.label_videoplayer.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_videoplayer.setWordWrap(True)
         self.label_videoplayer.setObjectName("label_videoplayer")
         self.slider_videoframe = QtWidgets.QSlider(self.centralwidget)
-        self.slider_videoframe.setGeometry(QtCore.QRect(690, 650, 651, 22))
+        self.slider_videoframe.setGeometry(QtCore.QRect(580, 630, 651, 22))
         self.slider_videoframe.setOrientation(QtCore.Qt.Horizontal)
         self.slider_videoframe.setObjectName("slider_videoframe")
         self.label_frameinfo = QtWidgets.QLabel(self.centralwidget)
-        self.label_frameinfo.setGeometry(QtCore.QRect(1360, 650, 171, 21))
+        self.label_frameinfo.setGeometry(QtCore.QRect(1250, 630, 191, 21))
+        font = QtGui.QFont()
+        font.setFamily("Consolas")
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_frameinfo.setFont(font)
         self.label_frameinfo.setObjectName("label_frameinfo")
         self.button_stop = QtWidgets.QPushButton(self.centralwidget)
-        self.button_stop.setGeometry(QtCore.QRect(680, 690, 113, 32))
+        self.button_stop.setGeometry(QtCore.QRect(780, 670, 60, 60))
+        self.button_stop.setStyleSheet("QPushButton {\n"
+"        border: 0px solid;\n"
+"    }\n"
+"    QPushButton:hover {\n"
+"        background-color: rgb(223, 223, 223);\n"
+"    }\n"
+"")
+        self.button_stop.setText("")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("image/stop.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_stop.setIcon(icon2)
+        self.button_stop.setIconSize(QtCore.QSize(60, 60))
         self.button_stop.setObjectName("button_stop")
         self.button_check_result = QtWidgets.QPushButton(self.centralwidget)
-        self.button_check_result.setGeometry(QtCore.QRect(10, 200, 220, 60))
+        self.button_check_result.setGeometry(QtCore.QRect(150, 230, 220, 60))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
         font.setPointSize(14)
         font.setBold(True)
         font.setWeight(75)
         self.button_check_result.setFont(font)
+        self.button_check_result.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgb(190, 184, 171);\n"
+"border: 0px solid;\n"
+"")
         self.button_check_result.setObjectName("button_check_result")
         self.button_rewind = QtWidgets.QPushButton(self.centralwidget)
-        self.button_rewind.setGeometry(QtCore.QRect(670, 750, 131, 32))
+        self.button_rewind.setGeometry(QtCore.QRect(620, 670, 60, 60))
+        self.button_rewind.setStyleSheet("QPushButton {\n"
+"        border: 0px solid;\n"
+"    }\n"
+"QPushButton:hover {\n"
+"        background-color: rgb(223, 223, 223);\n"
+"    }\n"
+"")
+        self.button_rewind.setText("")
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap("image/rewind.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_rewind.setIcon(icon3)
+        self.button_rewind.setIconSize(QtCore.QSize(60, 60))
         self.button_rewind.setObjectName("button_rewind")
         self.button_forward = QtWidgets.QPushButton(self.centralwidget)
-        self.button_forward.setGeometry(QtCore.QRect(1400, 750, 131, 32))
+        self.button_forward.setGeometry(QtCore.QRect(1190, 670, 60, 60))
+        self.button_forward.setStyleSheet("QPushButton {\n"
+"        border: 0px solid;\n"
+"    }\n"
+"QPushButton:hover {\n"
+"        background-color: rgb(223, 223, 223);\n"
+"    }\n"
+"")
+        self.button_forward.setText("")
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap("image/forward.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_forward.setIcon(icon4)
+        self.button_forward.setIconSize(QtCore.QSize(60, 60))
         self.button_forward.setObjectName("button_forward")
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -114,17 +194,25 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.button_start_judge.setText(_translate("MainWindow", "Start Judge"))
-        self.button_choose_video.setText(_translate("MainWindow", "Choose Video"))
+        self.button_start_judge.setText(_translate("MainWindow", "❗Start Judge❗"))
+        self.button_choose_video.setText(_translate("MainWindow", "👆🏻 Choose Video 👆🏻"))
         self.label_video_name.setText(_translate("MainWindow", "Video Name: "))
         self.label_interrupt_times.setText(_translate("MainWindow", "Interrupt Times:"))
-        self.label_accuracy.setText(_translate("MainWindow", "Accuracy:"))
-        self.label_wrong_judge_times.setText(_translate("MainWindow", "Wrong Judge Times:"))
-        self.button_play.setText(_translate("MainWindow", "Play"))
-        self.button_pause.setText(_translate("MainWindow", "Pause"))
-        self.label_videoplayer.setText(_translate("MainWindow", "video_player"))
-        self.label_frameinfo.setText(_translate("MainWindow", "current_frame/total_frame"))
-        self.button_stop.setText(_translate("MainWindow", "Stop"))
-        self.button_check_result.setText(_translate("MainWindow", "check result"))
-        self.button_rewind.setText(_translate("MainWindow", "rewind 5 secs"))
-        self.button_forward.setText(_translate("MainWindow", "forward 5 secs"))
+        self.label_videoplayer.setText(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Arial Black\'; font-size:9pt; font-weight:600; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:20pt; color:#908b81;\">📸</span><span style=\" font-size:20pt; text-decoration: underline; color:#908b81;\">Video Player</span></p>\n"
+"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; color:#cf341c;\">Please choose a video first</span></p></body></html>"))
+        self.label_frameinfo.setText(_translate("MainWindow", "current frame/total frame"))
+        self.button_check_result.setText(_translate("MainWindow", "✅Check result✅"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())

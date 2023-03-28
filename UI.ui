@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1551</width>
-    <height>852</height>
+    <width>1500</width>
+    <height>850</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,8 +20,8 @@
    <widget class="QPushButton" name="button_start_judge">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>130</y>
+      <x>150</x>
+      <y>140</y>
       <width>220</width>
       <height>60</height>
      </rect>
@@ -34,14 +34,20 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(190, 184, 171);
+border: 0px solid;
+</string>
+    </property>
     <property name="text">
-     <string>Start Judge</string>
+     <string>❗Start Judge❗</string>
     </property>
    </widget>
    <widget class="QPushButton" name="button_choose_video">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>150</x>
       <y>60</y>
       <width>220</width>
       <height>60</height>
@@ -55,23 +61,31 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(190, 184, 171);
+border: 0px solid;
+</string>
+    </property>
     <property name="text">
-     <string>Choose Video</string>
+     <string>👆🏻 Choose Video 👆🏻</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_video_name">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>40</y>
-      <width>330</width>
-      <height>30</height>
+      <x>60</x>
+      <y>309</y>
+      <width>380</width>
+      <height>50</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Candara</family>
-      <pointsize>18</pointsize>
+      <family>Arial Black</family>
+      <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -80,20 +94,25 @@
     <property name="scaledContents">
      <bool>true</bool>
     </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="label_interrupt_times">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>90</y>
+      <x>60</x>
+      <y>370</y>
       <width>380</width>
       <height>50</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Calibri</family>
-      <pointsize>18</pointsize>
+      <family>Arial Black</family>
+      <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -102,48 +121,7 @@
     <property name="scaledContents">
      <bool>true</bool>
     </property>
-   </widget>
-   <widget class="QLabel" name="label_accuracy">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>230</y>
-      <width>380</width>
-      <height>50</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Calibri</family>
-      <pointsize>18</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Accuracy:</string>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_wrong_judge_times">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>160</y>
-      <width>380</width>
-      <height>50</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Calibri</family>
-      <pointsize>18</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Wrong Judge Times:</string>
-    </property>
-    <property name="scaledContents">
+    <property name="wordWrap">
      <bool>true</bool>
     </property>
    </widget>
@@ -151,59 +129,125 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>330</y>
-      <width>431</width>
-      <height>471</height>
+      <y>460</y>
+      <width>430</width>
+      <height>351</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial Black</family>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
    </widget>
    <widget class="QPushButton" name="button_play">
     <property name="geometry">
      <rect>
-      <x>1410</x>
-      <y>690</y>
-      <width>113</width>
-      <height>32</height>
+      <x>920</x>
+      <y>670</y>
+      <width>60</width>
+      <height>60</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+        border: 0px solid;
+    }
+QPushButton:hover {
+        background-color: rgb(223, 223, 223);
+    }
+</string>
+    </property>
     <property name="text">
-     <string>Play</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>image/play.png</normaloff>image/play.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
     </property>
    </widget>
    <widget class="QPushButton" name="button_pause">
     <property name="geometry">
      <rect>
-      <x>1070</x>
-      <y>690</y>
-      <width>113</width>
-      <height>32</height>
+      <x>1050</x>
+      <y>670</y>
+      <width>60</width>
+      <height>60</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+        border: 0px solid;
+    }
+QPushButton:hover {
+        background-color: rgb(223, 223, 223);
+    }
+</string>
+    </property>
     <property name="text">
-     <string>Pause</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>image/pause.png</normaloff>image/pause.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
     </property>
    </widget>
    <widget class="QLabel" name="label_videoplayer">
     <property name="geometry">
      <rect>
-      <x>690</x>
-      <y>120</y>
+      <x>610</x>
+      <y>110</y>
       <width>800</width>
       <height>450</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial Black</family>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="frameShape">
      <enum>QFrame::WinPanel</enum>
     </property>
     <property name="text">
-     <string>video_player</string>
+     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial Black'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt; color:#908b81;&quot;&gt;📸&lt;/span&gt;&lt;span style=&quot; font-size:20pt; text-decoration: underline; color:#908b81;&quot;&gt;Video Player&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt; color:#cf341c;&quot;&gt;Please choose a video first&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QSlider" name="slider_videoframe">
     <property name="geometry">
      <rect>
-      <x>690</x>
-      <y>650</y>
+      <x>580</x>
+      <y>630</y>
       <width>651</width>
       <height>22</height>
      </rect>
@@ -215,34 +259,60 @@
    <widget class="QLabel" name="label_frameinfo">
     <property name="geometry">
      <rect>
-      <x>1360</x>
-      <y>650</y>
-      <width>171</width>
+      <x>1250</x>
+      <y>630</y>
+      <width>191</width>
       <height>21</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Consolas</family>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
     <property name="text">
-     <string>current_frame/total_frame</string>
+     <string>current frame/total frame</string>
     </property>
    </widget>
    <widget class="QPushButton" name="button_stop">
     <property name="geometry">
      <rect>
-      <x>680</x>
-      <y>690</y>
-      <width>113</width>
-      <height>32</height>
+      <x>780</x>
+      <y>670</y>
+      <width>60</width>
+      <height>60</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+        border: 0px solid;
+    }
+    QPushButton:hover {
+        background-color: rgb(223, 223, 223);
+    }
+</string>
+    </property>
     <property name="text">
-     <string>Stop</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>image/stop.png</normaloff>image/stop.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
     </property>
    </widget>
    <widget class="QPushButton" name="button_check_result">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>200</y>
+      <x>150</x>
+      <y>230</y>
       <width>220</width>
       <height>60</height>
      </rect>
@@ -255,34 +325,78 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(190, 184, 171);
+border: 0px solid;
+</string>
+    </property>
     <property name="text">
-     <string>check result</string>
+     <string>✅Check result✅</string>
     </property>
    </widget>
    <widget class="QPushButton" name="button_rewind">
     <property name="geometry">
      <rect>
-      <x>670</x>
-      <y>750</y>
-      <width>131</width>
-      <height>32</height>
+      <x>620</x>
+      <y>670</y>
+      <width>60</width>
+      <height>60</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+        border: 0px solid;
+    }
+QPushButton:hover {
+        background-color: rgb(223, 223, 223);
+    }
+</string>
+    </property>
     <property name="text">
-     <string>rewind 5 secs</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>image/rewind.png</normaloff>image/rewind.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
     </property>
    </widget>
    <widget class="QPushButton" name="button_forward">
     <property name="geometry">
      <rect>
-      <x>1400</x>
-      <y>750</y>
-      <width>131</width>
-      <height>32</height>
+      <x>1190</x>
+      <y>670</y>
+      <width>60</width>
+      <height>60</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+        border: 0px solid;
+    }
+QPushButton:hover {
+        background-color: rgb(223, 223, 223);
+    }
+</string>
+    </property>
     <property name="text">
-     <string>forward 5 secs</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>image/forward.png</normaloff>image/forward.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
     </property>
    </widget>
   </widget>
