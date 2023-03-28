@@ -13,6 +13,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.setup_control()
+        self.first_file = True
 
     ### 將每個button連上對應的event
     def setup_control(self):
@@ -29,19 +30,23 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         
         videoinfo = opencv_engine.get_video_info(filepath)
         self.vc = videoinfo["vc"]
+        self.video_filename = videoinfo["video_name"]
         self.video_fps = videoinfo["fps"]
-        self.video_total_frame_count = videoinfo["frame_count"]
-        self.video_width = videoinfo["width"]
-        self.video_height = videoinfo["height"]
 
         if not self.vc.isOpened():
             print("Cannot open camera")
             exit()
-        basename = os.path.basename(filepath)
-        filename = os.path.splitext(basename)[0]                                    # 只取出檔案名字([1]為副檔名)
-        self.ui.label_video_name.setText("Video Name:   " + filename)
+
+        self.ui.label_video_name.setText("Video Name:   " + self.video_filename)
         
-        self.video_file = Video_File(filepath=filepath, filename=filename) # 創一個Video_File class叫做file!!!!!!!!!!!!!
+        if self.first_file == True: # 第一次進入測試
+            self.first_file = False
+            print("第一次進來~~")
+        else:
+            del self.video_file
+            print("第二次進來~~")
+
+        self.video_file = Video_File(filepath=filepath, filename=self.video_filename) # 創一個Video_File class叫做file!!!!!!!!!!!!!
         
 
     

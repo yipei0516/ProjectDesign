@@ -1,4 +1,5 @@
 import cv2 as cv
+import os
 
 class opencv_engine(object):
 
@@ -7,6 +8,9 @@ class opencv_engine(object):
         videoinfo = {} # !!!!! dictionary !!!!!
         vc = cv.VideoCapture(video_path)
         videoinfo["vc"] = vc    # 影片片段
+        basename = os.path.basename(video_path)
+        filename = os.path.splitext(basename)[0]                                    # 只取出檔案名字([1]為副檔名)
+        videoinfo["video_name"] = filename
         videoinfo["fps"] = vc.get(cv.CAP_PROP_FPS) # 影片幀率
         videoinfo["frame_count"] = int(vc.get(cv.CAP_PROP_FRAME_COUNT)) # 影片總幀數
         videoinfo["width"] = int(vc.get(cv.CAP_PROP_FRAME_WIDTH))
