@@ -18,6 +18,7 @@ class Video_File:
         #     "end_frame"   : interrupt結束的frame(int)
         #     "start_time"  : interrupt開始的time(in seconds)
         #     "end_time"    : interrupt結束的time(in seconds)
+        #     "label"       : interrupt label --> A類表簡單可分類；B類表待確認類
         # }  ### 見Utils.py judge
         
         # self.interrupts_frame = []  # 裡面裝的是pair(interrupt開始的frame, interrupt結束的frame)
@@ -50,31 +51,89 @@ class Video_File:
                              "\t\t" + str(self.interrupt_list[i]["end_frame"]) +
                              "\t\t(" + str(end_normal_time["minute"]).zfill(2) + ": " + str(end_normal_time["second"]).zfill(2) + ")\n")
 
+    # def write_result_to_excel(self): ## write result to excel ##
+        
+    #     name = self.filename
+    #     wb = openpyxl.load_workbook('Result.xlsx')
+    #     ws1 = wb.create_sheet(name)
+    #     ws1['A1'].value = name
+    #     ws1['B1'].value = 'Start Frame #'
+    #     ws1['C1'].value = 'Start Time'
+    #     ws1['D1'].value = 'End Frame #'
+    #     ws1['E1'].value = 'End Time'
+
+    #     for i in range(self.total_interrupt_count):
+    #         interrupt_name = 'Interrupt#' + str(i)
+            
+    #         ##### interrupt start #####
+    #         start_frame_name = str(self.interrupt_list[i]["start_frame"])
+    #         start_normal_time = compute.get_normal_time_info(time_in_seconds=self.interrupt_list[i]["start_time"])
+    #         start_time_name = str(start_normal_time["minute"]).zfill(2) + ": " + str(start_normal_time["second"]).zfill(2)
+
+    #         ##### interrupt end #####
+    #         end_frame_name = str(self.interrupt_list[i]["end_frame"])
+    #         end_normal_time = compute.get_normal_time_info(time_in_seconds=self.interrupt_list[i]["end_time"])
+    #         end_time_name = str(end_normal_time["minute"]).zfill(2) + ": " + str(end_normal_time["second"]).zfill(2)
+
+    #         data = [interrupt_name, start_frame_name, start_time_name, end_frame_name, end_time_name]
+    #         ws1.append(data)
+
+    #     wb.save('Result.xlsx')
+
     def write_result_to_excel(self): ## write result to excel ##
         
         name = self.filename
         wb = openpyxl.load_workbook('Result.xlsx')
         ws1 = wb.create_sheet(name)
+
         ws1['A1'].value = name
         ws1['B1'].value = 'Start Frame #'
         ws1['C1'].value = 'Start Time'
         ws1['D1'].value = 'End Frame #'
         ws1['E1'].value = 'End Time'
+        ws1['F1'].value = 'Label'
+
+        # print A類 interrupt
+        for i in range(self.total_interrupt_count):
+            if(self.interrupt_list[i]["label"] == 'A'):
+                interrupt_name = 'Interrupt#' + str(i)
+                
+                ##### interrupt start #####
+                start_frame_name = str(self.interrupt_list[i]["start_frame"])
+                start_normal_time = compute.get_normal_time_info(time_in_seconds=self.interrupt_list[i]["start_time"])
+                start_time_name = str(start_normal_time["minute"]).zfill(2) + ": " + str(start_normal_time["second"]).zfill(2)
+
+                ##### interrupt end #####
+                end_frame_name = str(self.interrupt_list[i]["end_frame"])
+                end_normal_time = compute.get_normal_time_info(time_in_seconds=self.interrupt_list[i]["end_time"])
+                end_time_name = str(end_normal_time["minute"]).zfill(2) + ": " + str(end_normal_time["second"]).zfill(2)
+
+                ##### label #####
+                label_name = self.interrupt_list[i]["label"]
+                data = [interrupt_name, start_frame_name, start_time_name, end_frame_name, end_time_name, label_name]
+                ws1.append(data)
+
+        # print B類 interrupt
+        for i in range(3):
+            ws1.append(["", "", "", "", "", ""])
 
         for i in range(self.total_interrupt_count):
-            interrupt_name = 'Interrupt#' + str(i)
-            
-            ##### interrupt start #####
-            start_frame_name = str(self.interrupt_list[i]["start_frame"])
-            start_normal_time = compute.get_normal_time_info(time_in_seconds=self.interrupt_list[i]["start_time"])
-            start_time_name = str(start_normal_time["minute"]).zfill(2) + ": " + str(start_normal_time["second"]).zfill(2)
+             if(self.interrupt_list[i]["label"] == 'B'):
+                interrupt_name = 'Interrupt#' + str(i)
+                
+                ##### interrupt start #####
+                start_frame_name = str(self.interrupt_list[i]["start_frame"])
+                start_normal_time = compute.get_normal_time_info(time_in_seconds=self.interrupt_list[i]["start_time"])
+                start_time_name = str(start_normal_time["minute"]).zfill(2) + ": " + str(start_normal_time["second"]).zfill(2)
 
-            ##### interrupt end #####
-            end_frame_name = str(self.interrupt_list[i]["end_frame"])
-            end_normal_time = compute.get_normal_time_info(time_in_seconds=self.interrupt_list[i]["end_time"])
-            end_time_name = str(end_normal_time["minute"]).zfill(2) + ": " + str(end_normal_time["second"]).zfill(2)
+                ##### interrupt end #####
+                end_frame_name = str(self.interrupt_list[i]["end_frame"])
+                end_normal_time = compute.get_normal_time_info(time_in_seconds=self.interrupt_list[i]["end_time"])
+                end_time_name = str(end_normal_time["minute"]).zfill(2) + ": " + str(end_normal_time["second"]).zfill(2)
+                
+                ##### label #####
+                label_name = self.interrupt_list[i]["label"]
+                data = [interrupt_name, start_frame_name, start_time_name, end_frame_name, end_time_name, label_name]
+                ws1.append(data)
 
-            data = [interrupt_name, start_frame_name, start_time_name, end_frame_name, end_time_name]
-            ws1.append(data)
-
-        wb.save('Result.xlsx')
+        wb.save('newResult.xlsx')

@@ -78,6 +78,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         
         ##### Step1. start judge #####
         judge.start_judge(file=self.video_file, cap=self.vc)
+        judge.add_label(file=self.video_file)
 
         ##### Step2. write result to file #####
         self.video_file.write_result_to_file()    

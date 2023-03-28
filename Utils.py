@@ -148,6 +148,7 @@ class judge(object):
                 interrupt_info["end_frame"] = frame_no - tmp_count_frame
                 interrupt_info["start_time"] = round((frame_no - count_frame)/27.25, 1)
                 interrupt_info["end_time"] = round((frame_no - tmp_count_frame)/27.25, 1)
+                interrupt_info["label"] = 'A'
                 file.interrupt_list.append(interrupt_info) # 加入interrupt list中
                 # file.startFrame[candidate_index] = frame_no - count_frame
                 # file.endFrame[candidate_index] = frame_no - tmp_count_frame
@@ -167,3 +168,10 @@ class judge(object):
         cap.release()                    # 所有作業都完成後，釋放資源
         cv.destroyAllWindows()                  # 結束所有視窗
         
+    def add_label(file):
+        for i in range(1, file.total_interrupt_count):
+            p1 = i-1
+            p2 = i
+            if(file.interrupt_list[p2]['start_frame'] - file.interrupt_list[p1]['end_frame'] <= 50):
+                file.interrupt_list[p1]['label'] = 'B'
+                file.interrupt_list[p2]['label'] = 'B'
