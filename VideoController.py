@@ -80,7 +80,7 @@ class video_controller(object):
                 self.current_frame_no = 0  # 從頭開始replay
                 self.set_current_frame_no(self.current_frame_no)
             ### 若遇到選擇的interrupt結束時
-            elif self.current_frame_no == self.end_choose_interrupt_frame:
+            elif self.current_frame_no == int(self.end_choose_interrupt_frame)+1:
                 self.videoplayer_state = "pause"
                 self.current_frame_no = self.end_choose_interrupt_frame
                 self.set_current_frame_no(self.current_frame_no)

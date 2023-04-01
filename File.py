@@ -136,4 +136,4 @@ class Video_File:
                 data = [interrupt_name, start_frame_name, start_time_name, end_frame_name, end_time_name, label_name]
                 ws1.append(data)
 
-        wb.save('newResult.xlsx')
+        wb.save('Result.xlsx')
