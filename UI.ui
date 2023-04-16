@@ -37,8 +37,9 @@
     <property name="styleSheet">
      <string notr="true">color: rgb(255, 255, 255);
 background-color: rgb(190, 184, 171);
-border: 0px solid;
-</string>
+border-radius: 20px;
+border: 1px groove gray;
+border-style:outset;</string>
     </property>
     <property name="text">
      <string>❗Start Judge❗</string>
@@ -64,8 +65,9 @@ border: 0px solid;
     <property name="styleSheet">
      <string notr="true">color: rgb(255, 255, 255);
 background-color: rgb(190, 184, 171);
-border: 0px solid;
-</string>
+border-radius: 20px;
+border: 1px groove gray;
+border-style:outset;</string>
     </property>
     <property name="text">
      <string>👆🏻 Choose Video 👆🏻</string>
@@ -128,9 +130,9 @@ border: 0px solid;
    <widget class="QListWidget" name="list_widget_interrupt">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>460</y>
-      <width>430</width>
+      <x>70</x>
+      <y>450</y>
+      <width>241</width>
       <height>351</height>
      </rect>
     </property>
@@ -328,7 +330,9 @@ p, li { white-space: pre-wrap; }
     <property name="styleSheet">
      <string notr="true">color: rgb(255, 255, 255);
 background-color: rgb(190, 184, 171);
-border: 0px solid;
+border-radius: 20px;
+border: 1px groove gray;
+border-style:outset;
 </string>
     </property>
     <property name="text">
@@ -397,6 +401,34 @@ QPushButton:hover {
       <width>60</width>
       <height>60</height>
      </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button_remove_interrupt">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>630</y>
+      <width>191</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial Black</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(190, 184, 171);
+border-radius: 20px;
+border: 1px groove gray;
+border-style:outset;</string>
+    </property>
+    <property name="text">
+     <string>remove interrupt ❌</string>
     </property>
    </widget>
   </widget>

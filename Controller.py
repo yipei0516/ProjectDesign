@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from UI import Ui_MainWindow
 from File import Video_File
 from Utils import judge, compute, opencv_engine
-from VideoController import video_controller
+# from VideoController import video_controller
 import cv2 as cv 
 import os
 import re
@@ -21,36 +21,22 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.ui.button_choose_video.clicked.connect(self.clicked_choose_video)
         self.ui.button_start_judge.clicked.connect(self.clicked_start_judge)
         self.ui.button_check_result.clicked.connect(self.show_video)
-        self.ui.list_widget_interrupt.itemDoubleClicked.connect(self.interrupt_choose) # 選取interrupt時
+        self.ui.list_widget_interrupt.itemDoubleClicked.connect(self.show_interrupt) # 雙擊interrupt時，跳出此段畫面
+        self.ui.list_widget_interrupt.itemClicked.connect(self.choose_remove_interrupt) # 單擊interrupt時，選取起來準備刪除
+        self.ui.button_remove_interrupt.clicked.connect(self.remove_interrupt)
+    
         
 
-    # def setup_image(self):
-    #     play_image = "./image/play.png"
-    #     self.ui.button_play.setIcon(QtGui.QIcon(play_image))
-    #     self.ui.button_play.setIconSize(QtCore.QSize(60,60))
-    #     self.ui.button_play.setStyleSheet("border :0px solid ;")
-    #     play_image = "./image/pause.png"
-    #     self.ui.button_pause.setIcon(QtGui.QIcon(play_image))
-    #     self.ui.button_pause.setIconSize(QtCore.QSize(60,60))
-    #     self.ui.button_pause.setStyleSheet("border :0px solid ;")
-    #     play_image = "./image/stop.png"
-    #     self.ui.button_stop.setIcon(QtGui.QIcon(play_image))
-    #     self.ui.button_stop.setIconSize(QtCore.QSize(60,60))
-    #     self.ui.button_stop.setStyleSheet("border :0px solid ;")
-    #     play_image = "./image/forward.png"
-    #     self.ui.button_forward.setIcon(QtGui.QIcon(play_image))
-    #     self.ui.button_forward.setIconSize(QtCore.QSize(60,60))
-    #     self.ui.button_forward.setStyleSheet("border :0px solid ;")
-    #     play_image = "./image/rewind.png"
-    #     self.ui.button_rewind.setIcon(QtGui.QIcon(play_image))
-    #     self.ui.button_rewind.setIconSize(QtCore.QSize(60,60))
-    #     self.ui.button_rewind.setStyleSheet("border :0px solid ;")
-
-    
     ### load video into FileDialog
     def clicked_choose_video(self):
+
         filepath, filetype = QtWidgets.QFileDialog.getOpenFileName()
-        
+
+        if self.first_file: ## 第一次進入
+            self.first_file = False
+        else: ## 非第一次進入
+            opencv_engine.release_video(self.vc)
+
         videoinfo = opencv_engine.get_video_info(filepath)
         self.vc = videoinfo["vc"]
         self.video_filename = videoinfo["video_name"]
@@ -62,13 +48,6 @@ class MainWindow_controller(QtWidgets.QMainWindow):
 
         self.ui.label_video_name.setText("Video Name:   " + self.video_filename)
         
-        if self.first_file == True: # 第一次進入測試
-            self.first_file = False
-            print("第一次進來~~")
-        else:
-            del self.video_file
-            print("第二次進來~~")
-
         self.video_file = Video_File(filepath=filepath, filename=self.video_filename) # 創一個Video_File class叫做file!!!!!!!!!!!!!
         
 
@@ -77,8 +56,8 @@ class MainWindow_controller(QtWidgets.QMainWindow):
     def clicked_start_judge(self):
         
         ##### Step1. start judge #####
-        judge.start_judge(file=self.video_file, cap=self.vc)
-        judge.add_label(file=self.video_file)
+        judge.start_judge(file=self.video_file, cap=self.vc, fps=self.video_fps)
+        judge.revise_interrupt(file=self.video_file)
 
         ##### Step2. write result to file #####
         self.video_file.write_result_to_file()    
@@ -110,16 +89,16 @@ class MainWindow_controller(QtWidgets.QMainWindow):
             # list widget內item的形式為: 3270 - 3295
 
         ##### Step2. show video in video player #####
-        self.video_path = self.video_file.filepath
-        self.video_controller = video_controller(video_path=self.video_path, ui=self.ui)
-        self.ui.button_play.clicked.connect(self.video_controller.play) # connect to function()
-        self.ui.button_stop.clicked.connect(self.video_controller.stop)
-        # self.ui.button_stop.setStyleSheet()
-        self.ui.button_pause.clicked.connect(self.video_controller.pause)
-        self.ui.button_forward.clicked.connect(self.video_controller.forward)
-        self.ui.button_rewind.clicked.connect(self.video_controller.rewind)
+        # self.video_path = self.video_file.filepath
+        # self.video_controller = video_controller(video_path=self.video_path, ui=self.ui)
+        # self.ui.button_play.clicked.connect(self.video_controller.play) # connect to function()
+        # self.ui.button_stop.clicked.connect(self.video_controller.stop)
+        # # self.ui.button_stop.setStyleSheet()
+        # self.ui.button_pause.clicked.connect(self.video_controller.pause)
+        # self.ui.button_forward.clicked.connect(self.video_controller.forward)
+        # self.ui.button_rewind.clicked.connect(self.video_controller.rewind)
     
-    def interrupt_choose(self):
+    def show_interrupt(self):
 
         ##### Step1. 取出選取到的interrupt
         item = self.ui.list_widget_interrupt.currentItem().text()
@@ -141,14 +120,36 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         end_normal_time["second"] = int(choose_frame[3])
         end_choose_frame = compute.get_frame_num(end_normal_time, self.video_fps)
 
+        frame_diff = end_choose_frame - start_choose_frame
+        count_frame = 0
         ##### Step2. 播映interrupt開始的地方
-        self.video_controller.pause()   # 先讓影片不播映->按下play再開始
-        self.video_controller.current_frame_no = start_choose_frame
-        # self.video_controller.set_current_frame_no(self.video_controller.current_frame_no)
-        # frame = self.video_controller.get_next_frame()
-        # self.video_controller.update_label_frame(frame)
+        self.vc.set(cv.CAP_PROP_POS_FRAMES, start_choose_frame - self.video_fps*1) #往前一秒開始播放
+        while True:
+            count_frame += 1
+            ret, frame = self.vc.read()             # 讀取影片的每一幀
+            if not ret:
+                print("Cannot receive frame")   # 如果讀取錯誤，印出訊息
+                break
+            cv.imshow('Interrupy fragment', frame)     # 如果讀取成功，顯示該幀的畫面
+            if cv.waitKey(int(1000/self.video_fps)) == ord('q') or count_frame == int(frame_diff + self.video_fps*1): # 往後一秒結束(變成int才能偵測幀數)
+                break
+        cv.destroyAllWindows()                 # 結束所有視窗
+        # self.video_controller.pause()   # 先讓影片不播映->按下play再開始
+        # self.video_controller.current_frame_no = start_choose_frame
 
         ##### Step3. 暫停interrupt結束的地方
-        self.video_controller.end_choose_interrupt_frame = end_choose_frame
+        # self.video_controller.end_choose_interrupt_frame = end_choose_frame
         # 因為video要從play狀態變成pause狀態所以得將end_choose_interrupt_frame傳入video_controller
+
+    def choose_remove_interrupt(self):
+        self.remove_item_index = self.ui.list_widget_interrupt.currentRow()
+
+
+    def remove_interrupt(self):
+        # 刪除list widget的item
+        remove_item = self.ui.list_widget_interrupt.takeItem(self.remove_item_index)
+        self.ui.list_widget_interrupt.removeItemWidget(remove_item)
+
+        # 刪除excel裡的row
+        self.video_file.delete_excel_row(self.remove_item_index)
 

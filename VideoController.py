@@ -20,6 +20,7 @@ class video_controller(object):
     def init_video_info(self):
         videoinfo = opencv_engine.get_video_info(self.video_path)
         self.vc = videoinfo["vc"]
+        self.video_name = videoinfo["video_name"]
         self.video_fps = videoinfo["fps"]
         self.video_total_frame_count = videoinfo["frame_count"]
         self.video_width = videoinfo["width"]

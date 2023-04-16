@@ -16,6 +16,13 @@ class opencv_engine(object):
         videoinfo["width"] = int(vc.get(cv.CAP_PROP_FRAME_WIDTH))
         videoinfo["height"] = int(vc.get(cv.CAP_PROP_FRAME_HEIGHT))
         return videoinfo
+    
+    def release_video(cap):
+        if cap is None:
+            return
+        else:
+            cap.release()
+            return
         
 class compute(object):
     def get_normal_time_info(time_in_seconds):
@@ -31,7 +38,7 @@ class compute(object):
 
 class judge(object):
 
-    def start_judge(file, cap):
+    def start_judge(file, cap, fps):
         ## parameter setting ##
         limit = 20      # count_frame的上限 = fake_count的上限 = 20
 
@@ -146,14 +153,9 @@ class judge(object):
                 interrupt_info = {} # dictionary
                 interrupt_info["start_frame"] = frame_no - count_frame
                 interrupt_info["end_frame"] = frame_no - tmp_count_frame
-                interrupt_info["start_time"] = round((frame_no - count_frame)/27.25, 1)
-                interrupt_info["end_time"] = round((frame_no - tmp_count_frame)/27.25, 1)
-                interrupt_info["label"] = 'A'
+                interrupt_info["start_time"] = round((frame_no - count_frame)/fps, 1)
+                interrupt_info["end_time"] = round((frame_no - tmp_count_frame)/fps, 1)
                 file.interrupt_list.append(interrupt_info) # 加入interrupt list中
-                # file.startFrame[candidate_index] = frame_no - count_frame
-                # file.endFrame[candidate_index] = frame_no - tmp_count_frame
-                # file.startTime[candidate_index] = round((frame_no - count_frame)/27.25, 1)
-                # file.endTime[candidate_index] = round((frame_no - tmp_count_frame)/27.25, 1)
                 candidate_index += 1
                 count_frame = 0
             
@@ -165,13 +167,18 @@ class judge(object):
                 break
         
         # !!!!! 目前為了後續檢查interrupt所以不能release !!!!!
-        cap.release()                    # 所有作業都完成後，釋放資源
         cv.destroyAllWindows()                  # 結束所有視窗
         
-    def add_label(file):
+        
+    def revise_interrupt(file):
+        new_list = []
+        new_list.append(file.interrupt_list[0])
         for i in range(1, file.total_interrupt_count):
-            p1 = i-1
-            p2 = i
-            if(file.interrupt_list[p2]['start_frame'] - file.interrupt_list[p1]['end_frame'] <= 50):
-                file.interrupt_list[p1]['label'] = 'B'
-                file.interrupt_list[p2]['label'] = 'B'
+            if(file.interrupt_list[i]['start_frame'] - file.interrupt_list[i-1]['end_frame'] <= 80): 
+                new_list[len(new_list)-1]['end_frame'] = file.interrupt_list[i]['end_frame']
+                new_list[len(new_list)-1]['end_time'] = file.interrupt_list[i]['end_time']
+            else:
+                new_list.append(file.interrupt_list[i])
+
+        file.interrupt_list = new_list
+        file.total_interrupt_count = len(new_list)

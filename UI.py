@@ -28,8 +28,9 @@ class Ui_MainWindow(object):
         self.button_start_judge.setFont(font)
         self.button_start_judge.setStyleSheet("color: rgb(255, 255, 255);\n"
 "background-color: rgb(190, 184, 171);\n"
-"border: 0px solid;\n"
-"")
+"border-radius: 20px;\n"
+"border: 1px groove gray;\n"
+"border-style:outset;")
         self.button_start_judge.setObjectName("button_start_judge")
         self.button_choose_video = QtWidgets.QPushButton(self.centralwidget)
         self.button_choose_video.setGeometry(QtCore.QRect(150, 60, 220, 60))
@@ -41,8 +42,9 @@ class Ui_MainWindow(object):
         self.button_choose_video.setFont(font)
         self.button_choose_video.setStyleSheet("color: rgb(255, 255, 255);\n"
 "background-color: rgb(190, 184, 171);\n"
-"border: 0px solid;\n"
-"")
+"border-radius: 20px;\n"
+"border: 1px groove gray;\n"
+"border-style:outset;")
         self.button_choose_video.setObjectName("button_choose_video")
         self.label_video_name = QtWidgets.QLabel(self.centralwidget)
         self.label_video_name.setGeometry(QtCore.QRect(60, 309, 380, 50))
@@ -67,7 +69,7 @@ class Ui_MainWindow(object):
         self.label_interrupt_times.setWordWrap(True)
         self.label_interrupt_times.setObjectName("label_interrupt_times")
         self.list_widget_interrupt = QtWidgets.QListWidget(self.centralwidget)
-        self.list_widget_interrupt.setGeometry(QtCore.QRect(50, 460, 430, 351))
+        self.list_widget_interrupt.setGeometry(QtCore.QRect(70, 450, 241, 351))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
         font.setBold(True)
@@ -153,7 +155,9 @@ class Ui_MainWindow(object):
         self.button_check_result.setFont(font)
         self.button_check_result.setStyleSheet("color: rgb(255, 255, 255);\n"
 "background-color: rgb(190, 184, 171);\n"
-"border: 0px solid;\n"
+"border-radius: 20px;\n"
+"border: 1px groove gray;\n"
+"border-style:outset;\n"
 "")
         self.button_check_result.setObjectName("button_check_result")
         self.button_rewind = QtWidgets.QPushButton(self.centralwidget)
@@ -186,6 +190,20 @@ class Ui_MainWindow(object):
         self.button_forward.setIcon(icon4)
         self.button_forward.setIconSize(QtCore.QSize(60, 60))
         self.button_forward.setObjectName("button_forward")
+        self.button_remove_interrupt = QtWidgets.QPushButton(self.centralwidget)
+        self.button_remove_interrupt.setGeometry(QtCore.QRect(340, 630, 191, 41))
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.button_remove_interrupt.setFont(font)
+        self.button_remove_interrupt.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgb(190, 184, 171);\n"
+"border-radius: 20px;\n"
+"border: 1px groove gray;\n"
+"border-style:outset;")
+        self.button_remove_interrupt.setObjectName("button_remove_interrupt")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -206,13 +224,4 @@ class Ui_MainWindow(object):
 "<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; color:#cf341c;\">Please choose a video first</span></p></body></html>"))
         self.label_frameinfo.setText(_translate("MainWindow", "current frame/total frame"))
         self.button_check_result.setText(_translate("MainWindow", "✅Check result✅"))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+        self.button_remove_interrupt.setText(_translate("MainWindow", "remove interrupt ❌"))
