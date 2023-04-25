@@ -2,23 +2,21 @@ from PyQt5 import QtCore
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtCore import QTimer 
 
-from Utils import opencv_engine
+# from Utils import opencv_engine
 
 
 class video_controller(object):
-    def __init__(self, video_path, ui, end_choose_interrupt_frame = -1):
-        self.video_path = video_path
+    def __init__(self, videoinfo, ui, end_choose_interrupt_frame = -1):
         self.ui = ui
         self.end_choose_interrupt_frame = end_choose_interrupt_frame    # default: end_choose_interrupt_frame為0(一開始可不用傳入東西)
         self.qpixmap_fix_width = 800                                    # 16x9 = 1920x1080 = 1280x720 = 800x450
         self.qpixmap_fix_height = 450
         self.current_frame_no = 0
         self.videoplayer_state = "pause"
-        self.init_video_info()
+        self.init_video_info(videoinfo=videoinfo)
         self.set_video_player()
 
-    def init_video_info(self):
-        videoinfo = opencv_engine.get_video_info(self.video_path)
+    def init_video_info(self, videoinfo):
         self.vc = videoinfo["vc"]
         self.video_name = videoinfo["video_name"]
         self.video_fps = videoinfo["fps"]
@@ -81,7 +79,7 @@ class video_controller(object):
                 self.current_frame_no = 0  # 從頭開始replay
                 self.set_current_frame_no(self.current_frame_no)
             ### 若遇到選擇的interrupt結束時
-            elif self.current_frame_no == int(self.end_choose_interrupt_frame)+1:
+            elif self.current_frame_no == int(self.end_choose_interrupt_frame):
                 self.videoplayer_state = "pause"
                 self.current_frame_no = self.end_choose_interrupt_frame
                 self.set_current_frame_no(self.current_frame_no)

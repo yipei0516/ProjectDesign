@@ -122,7 +122,7 @@ class judge(object):
                             count_frame = 0
                         tmp_flag = False
                         count_flag = False
-                    elif(tmp_flag == False) and (count_frame >= 8):
+                    elif(tmp_flag == False) and (count_frame >= 10):
                         tmp_flag = True
                         tmp_count_frame += 1
                         count_frame += 1
@@ -155,6 +155,7 @@ class judge(object):
                 interrupt_info["end_frame"] = frame_no - tmp_count_frame
                 interrupt_info["start_time"] = round((frame_no - count_frame)/fps, 1)
                 interrupt_info["end_time"] = round((frame_no - tmp_count_frame)/fps, 1)
+                interrupt_info["label"] = 'A'
                 file.interrupt_list.append(interrupt_info) # 加入interrupt list中
                 candidate_index += 1
                 count_frame = 0
@@ -168,17 +169,88 @@ class judge(object):
         
         # !!!!! 目前為了後續檢查interrupt所以不能release !!!!!
         cv.destroyAllWindows()                  # 結束所有視窗
+
         
+
+    # def revise_interrupt(file):
+    #     if file.total_interrupt_count != 0:
+    #         file.revised_interrupt_list.append(file.interrupt_list[0])
+    #         file.total_revised_interrupt_count += 1
+
+    #     interrupt_info = {}
+
+    #     for i in range(1, file.total_interrupt_count):
+    #         interrupt_info["start_frame"] = file.interrupt_list[file.total_revised_interrupt_count-1]["start_frame"]
+    #         interrupt_info["start_time"] = file.interrupt_list[file.total_revised_interrupt_count-1]["start_time"]
+    #         if file.interrupt_list[i]['start_frame'] - file.interrupt_list[i-1]['end_frame'] <= 100:
+    #             interrupt_info["label"] = 'B'
+    #             interrupt_info["end_frame"] = file.interrupt_list[i]["end_frame"]
+    #             interrupt_info["end_time"] = file.interrupt_list[i]["end_time"]
+
+    #             # file.revised_interrupt_list[len(file.revised_interrupt_list)-1]["end_frame"] = file.interrupt_list[i]["end_frame"]
+    #             # file.revised_interrupt_list[len(file.revised_interrupt_list)-1]["end_time"] = file.interrupt_list[i]["end_time"]
+    #             # file.revised_interrupt_list[len(file.revised_interrupt_list)-1]["label"] = 'B'
+
+    #             # file.interrupt_list[i]["label"] = 'B'
+    #         else:
+    #             interrupt_info = file.interrupt_list[i]
+    #             file.revised_interrupt_list.append(interrupt_info)
+
+    #     file.total_revised_interrupt_count = len(file.revised_interrupt_list)
+
+
         
     def revise_interrupt(file):
-        new_list = []
-        new_list.append(file.interrupt_list[0])
-        for i in range(1, file.total_interrupt_count):
-            if(file.interrupt_list[i]['start_frame'] - file.interrupt_list[i-1]['end_frame'] <= 80): 
-                new_list[len(new_list)-1]['end_frame'] = file.interrupt_list[i]['end_frame']
-                new_list[len(new_list)-1]['end_time'] = file.interrupt_list[i]['end_time']
-            else:
-                new_list.append(file.interrupt_list[i])
 
-        file.interrupt_list = new_list
-        file.total_interrupt_count = len(new_list)
+        interrupt_info = {} # dictionary
+        first_BLabel_record = False
+
+        if file.total_interrupt_count == 0:
+            return
+        
+        elif file.total_interrupt_count == 1:
+            file.revised_interrupt_list.append(file.interrupt_list[0])
+            file.total_revised_interrupt_count += 1
+            return
+        
+
+        for i in range(1, file.total_interrupt_count):
+            p1 = i-1
+            p2 = i
+
+            if(file.interrupt_list[p2]['start_frame'] - file.interrupt_list[p1]['end_frame'] <= 100):
+                if(first_BLabel_record == False):
+                    interrupt_info["start_frame"] = file.interrupt_list[p1]["start_frame"]
+                    interrupt_info["start_time"] = file.interrupt_list[p1]["start_time"]
+                    interrupt_info["label"] = 'B'
+                    first_BLabel_record = True
+
+                    file.interrupt_list[p1]['label'] = 'B'
+
+                interrupt_info["end_frame"] = file.interrupt_list[p2]["end_frame"]
+                interrupt_info["end_time"] = file.interrupt_list[p2]["end_time"]
+                file.interrupt_list[p2]['label'] = 'B'
+
+                if(p2 == file.total_interrupt_count-1):
+                    file.total_revised_interrupt_count += 1
+                    file.revised_interrupt_list.append(interrupt_info)
+
+            else:
+                if not interrupt_info:                  #if(interrupt_info == NULL)     --> A的interrupt 
+                    file.total_revised_interrupt_count += 1
+                    interrupt_info = file.interrupt_list[p1]
+                    file.revised_interrupt_list.append(interrupt_info)
+
+                else:                                   #if(interrupt_info != NULL)     --> 最後一個B收尾
+                    file.total_revised_interrupt_count += 1
+                    file.revised_interrupt_list.append(interrupt_info)
+                
+                interrupt_info = {}      # 幫下一個interrupt清空interrupt_info變數
+                first_BLabel_record = False
+
+
+                if(p2 == file.total_interrupt_count-1):
+                    file.total_revised_interrupt_count += 1
+                    interrupt_info = file.interrupt_list[p2]
+                    file.revised_interrupt_list.append(interrupt_info)
+

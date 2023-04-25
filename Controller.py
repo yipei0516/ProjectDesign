@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from UI import Ui_MainWindow
 from File import Video_File
 from Utils import judge, compute, opencv_engine
-# from VideoController import video_controller
+from VideoController import video_controller
 import cv2 as cv 
 import os
 import re
@@ -20,8 +20,8 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         # TODO
         self.ui.button_choose_video.clicked.connect(self.clicked_choose_video)
         self.ui.button_start_judge.clicked.connect(self.clicked_start_judge)
-        self.ui.button_check_result.clicked.connect(self.show_video)
-        self.ui.list_widget_interrupt.itemDoubleClicked.connect(self.show_interrupt) # 雙擊interrupt時，跳出此段畫面
+        self.ui.button_check_result.clicked.connect(self.show_result)
+        self.ui.list_widget_interrupt.itemDoubleClicked.connect(self.show_interrupt_clip) # 雙擊interrupt時，跳出此段畫面
         self.ui.list_widget_interrupt.itemClicked.connect(self.choose_remove_interrupt) # 單擊interrupt時，選取起來準備刪除
         self.ui.button_remove_interrupt.clicked.connect(self.remove_interrupt)
     
@@ -37,10 +37,10 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         else: ## 非第一次進入
             opencv_engine.release_video(self.vc)
 
-        videoinfo = opencv_engine.get_video_info(filepath)
-        self.vc = videoinfo["vc"]
-        self.video_filename = videoinfo["video_name"]
-        self.video_fps = videoinfo["fps"]
+        self.videoinfo = opencv_engine.get_video_info(filepath)
+        self.vc = self.videoinfo["vc"]
+        self.video_filename = self.videoinfo["video_name"]
+        self.video_fps = self.videoinfo["fps"]
 
         if not self.vc.isOpened():
             print("Cannot open camera")
@@ -63,67 +63,53 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.video_file.write_result_to_file()    
 
         ##### Step3. write result to excel #####
-        self.video_file.write_result_to_excel()   
+        self.video_file.write_result_to_excel()  
             
         ##### Step4. print result to UI #####
         # record interrupt times, wrong judge times, accuracy
         self.wrongJudgeTimes = 0        # 目前沒這個資訊
         self.accuracy = 0               # 有了total_interrupt_count跟wrongJudgeTimes就可算accuracy
-        self.ui.label_interrupt_times.setText("Interrupt Times:   " + str(self.video_file.total_interrupt_count))
+        self.ui.label_interrupt_times.setText("Interrupt Times:   " + str(self.video_file.total_revised_interrupt_count))
 
 
 
-    ### 按下check result button後出現video player
-    def show_video(self):
+    def show_result(self):
 
         ##### Step1. show result in list widget #####
         # 將interrupt frame加入list widget裡
-        for i in range(self.video_file.total_interrupt_count):
-            start_normal_time = compute.get_normal_time_info(time_in_seconds=self.video_file.interrupt_list[i]["start_time"])
+        for i in range(self.video_file.total_revised_interrupt_count):
+            start_normal_time = compute.get_normal_time_info(time_in_seconds=self.video_file.revised_interrupt_list[i]["start_time"])
             start_time_name = str(start_normal_time["minute"]).zfill(2) + ": " + str(start_normal_time["second"]).zfill(2)
 
-            end_normal_time = compute.get_normal_time_info(time_in_seconds=self.video_file.interrupt_list[i]["end_time"])
+            end_normal_time = compute.get_normal_time_info(time_in_seconds=self.video_file.revised_interrupt_list[i]["end_time"])
             end_time_name = str(end_normal_time["minute"]).zfill(2) + ": " + str(end_normal_time["second"]).zfill(2)
 
-            self.ui.list_widget_interrupt.addItem(start_time_name + " - " + end_time_name)
+            self.ui.list_widget_interrupt.addItem( "Interrupt" + str(i+1) + ". " + start_time_name + " - " + end_time_name)
             # list widget內item的形式為: 3270 - 3295
 
+
         ##### Step2. show video in video player #####
-        # self.video_path = self.video_file.filepath
-        # self.video_controller = video_controller(video_path=self.video_path, ui=self.ui)
+        # self.video_controller = video_controller(videoinfo=self.videoinfo, ui=self.ui)
+        # self.video_controller.pause()
         # self.ui.button_play.clicked.connect(self.video_controller.play) # connect to function()
         # self.ui.button_stop.clicked.connect(self.video_controller.stop)
-        # # self.ui.button_stop.setStyleSheet()
         # self.ui.button_pause.clicked.connect(self.video_controller.pause)
         # self.ui.button_forward.clicked.connect(self.video_controller.forward)
         # self.ui.button_rewind.clicked.connect(self.video_controller.rewind)
     
-    def show_interrupt(self):
+    def show_interrupt_clip(self):
+        ##### Step1. 取出選取到的interrupt 
+        item_index = self.ui.list_widget_interrupt.currentRow()
 
-        ##### Step1. 取出選取到的interrupt
-        item = self.ui.list_widget_interrupt.currentItem().text()
-        choose_frame = re.findall(r"\d+", item) # 從string中抓出數字的部分
-            # choose_frame = [
-            #     start interrupt minute,
-            #     start interrupt second,
-            #     end interrupt minute,
-            #     end interrupt second,
-            # ]
+        start_choose_frame = self.video_file.revised_interrupt_list[item_index]['start_frame']
+        end_choose_frame = self.video_file.revised_interrupt_list[item_index]['end_frame']
 
-        start_normal_time = {}
-        start_normal_time["minute"] = int(choose_frame[0])
-        start_normal_time["second"] = int(choose_frame[1])
-        start_choose_frame = compute.get_frame_num(start_normal_time, self.video_fps)
-
-        end_normal_time = {}
-        end_normal_time["minute"] = int(choose_frame[2])
-        end_normal_time["second"] = int(choose_frame[3])
-        end_choose_frame = compute.get_frame_num(end_normal_time, self.video_fps)
-
+        ##### Step2. 播映interrupt開始的地方
         frame_diff = end_choose_frame - start_choose_frame
         count_frame = 0
-        ##### Step2. 播映interrupt開始的地方
-        self.vc.set(cv.CAP_PROP_POS_FRAMES, start_choose_frame - self.video_fps*1) #往前一秒開始播放
+
+        ### 直接show ver ###
+        self.vc.set(cv.CAP_PROP_POS_FRAMES, start_choose_frame - self.video_fps*1) #往前1秒開始播放
         while True:
             count_frame += 1
             ret, frame = self.vc.read()             # 讀取影片的每一幀
@@ -131,15 +117,14 @@ class MainWindow_controller(QtWidgets.QMainWindow):
                 print("Cannot receive frame")   # 如果讀取錯誤，印出訊息
                 break
             cv.imshow('Interrupy fragment', frame)     # 如果讀取成功，顯示該幀的畫面
-            if cv.waitKey(int(1000/self.video_fps)) == ord('q') or count_frame == int(frame_diff + self.video_fps*1): # 往後一秒結束(變成int才能偵測幀數)
+            if cv.waitKey(int(1000/self.video_fps)) == ord('q') or count_frame == int(frame_diff + self.video_fps*1): # 往後1秒結束(變成int才能偵測幀數)
                 break
         cv.destroyAllWindows()                 # 結束所有視窗
-        # self.video_controller.pause()   # 先讓影片不播映->按下play再開始
+        
+        ### video player ver ###
         # self.video_controller.current_frame_no = start_choose_frame
-
-        ##### Step3. 暫停interrupt結束的地方
-        # self.video_controller.end_choose_interrupt_frame = end_choose_frame
-        # 因為video要從play狀態變成pause狀態所以得將end_choose_interrupt_frame傳入video_controller
+        # self.video_controller.end_choose_interrupt_frame = end_choose_frame # 因為video要從play狀態變成pause狀態所以得將end_choose_interrupt_frame傳入video_controller
+        
 
     def choose_remove_interrupt(self):
         self.remove_item_index = self.ui.list_widget_interrupt.currentRow()
