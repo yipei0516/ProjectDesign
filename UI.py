@@ -191,19 +191,34 @@ class Ui_MainWindow(object):
         self.button_forward.setIconSize(QtCore.QSize(60, 60))
         self.button_forward.setObjectName("button_forward")
         self.button_remove_interrupt = QtWidgets.QPushButton(self.centralwidget)
-        self.button_remove_interrupt.setGeometry(QtCore.QRect(340, 630, 191, 41))
+        self.button_remove_interrupt.setGeometry(QtCore.QRect(330, 750, 170, 35))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
-        font.setPointSize(11)
+        font.setPointSize(10)
         font.setBold(True)
         font.setWeight(75)
         self.button_remove_interrupt.setFont(font)
         self.button_remove_interrupt.setStyleSheet("color: rgb(255, 255, 255);\n"
-"background-color: rgb(190, 184, 171);\n"
-"border-radius: 20px;\n"
+"background-color: rgb(45, 45, 45);\n"
+"border-radius: 10px;\n"
 "border: 1px groove gray;\n"
 "border-style:outset;")
         self.button_remove_interrupt.setObjectName("button_remove_interrupt")
+        self.button_import_result = QtWidgets.QPushButton(self.centralwidget)
+        self.button_import_result.setGeometry(QtCore.QRect(370, 360, 220, 60))
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.button_import_result.setFont(font)
+        self.button_import_result.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgb(190, 184, 171);\n"
+"border-radius: 20px;\n"
+"border: 1px groove gray;\n"
+"border-style:outset;\n"
+"")
+        self.button_import_result.setObjectName("button_import_result")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -225,3 +240,4 @@ class Ui_MainWindow(object):
         self.label_frameinfo.setText(_translate("MainWindow", "current frame/total frame"))
         self.button_check_result.setText(_translate("MainWindow", "✅Check result✅"))
         self.button_remove_interrupt.setText(_translate("MainWindow", "remove interrupt ❌"))
+        self.button_import_result.setText(_translate("MainWindow", "Import Result"))

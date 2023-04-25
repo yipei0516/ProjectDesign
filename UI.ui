@@ -406,16 +406,44 @@ QPushButton:hover {
    <widget class="QPushButton" name="button_remove_interrupt">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>630</y>
-      <width>191</width>
-      <height>41</height>
+      <x>330</x>
+      <y>750</y>
+      <width>170</width>
+      <height>35</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>Arial Black</family>
-      <pointsize>11</pointsize>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(45, 45, 45);
+border-radius: 10px;
+border: 1px groove gray;
+border-style:outset;</string>
+    </property>
+    <property name="text">
+     <string>remove interrupt ❌</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button_import_result">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>360</y>
+      <width>220</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial Black</family>
+      <pointsize>14</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -425,10 +453,11 @@ QPushButton:hover {
 background-color: rgb(190, 184, 171);
 border-radius: 20px;
 border: 1px groove gray;
-border-style:outset;</string>
+border-style:outset;
+</string>
     </property>
     <property name="text">
-     <string>remove interrupt ❌</string>
+     <string>Import Result</string>
     </property>
    </widget>
   </widget>

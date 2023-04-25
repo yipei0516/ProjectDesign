@@ -24,6 +24,8 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.ui.list_widget_interrupt.itemDoubleClicked.connect(self.show_interrupt_clip) # 雙擊interrupt時，跳出此段畫面
         self.ui.list_widget_interrupt.itemClicked.connect(self.choose_remove_interrupt) # 單擊interrupt時，選取起來準備刪除
         self.ui.button_remove_interrupt.clicked.connect(self.remove_interrupt)
+
+        self.ui.button_import_result.clicked.connect(self.import_result_file)
     
         
 
@@ -49,6 +51,24 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.ui.label_video_name.setText("Video Name:   " + self.video_filename)
         
         self.video_file = Video_File(filepath=filepath, filename=self.video_filename) # 創一個Video_File class叫做file!!!!!!!!!!!!!
+
+        if self.video_filename in self.video_file.wb.sheetnames:
+            print("TRUE")
+
+        if self.video_filename in self.video_file.wb.sheetnames:
+            mbox = QtWidgets.QMessageBox(self.ui.centralwidget) # 跳出警告訊息
+            mbox.setIcon(QtWidgets.QMessageBox.Warning)
+            mbox.setText("你已經測試過此手術片段，是否要重新測?")
+            # 添加三顆按鈕
+            mbox.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            # 設定預設按鈕
+            mbox.setDefaultButton(QtWidgets.QMessageBox.No)
+            ret = mbox.exec()                      # 取得點擊的按鈕數字
+            if ret == QtWidgets.QMessageBox.Yes:
+                print("YES")
+            elif ret == QtWidgets.QMessageBox.No:
+                print("NO")
+                return
         
 
     
@@ -138,3 +158,6 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         # 刪除excel裡的row
         self.video_file.delete_excel_row(self.remove_item_index)
 
+
+    def import_result_file(self):
+        df = pd.read_excel("歷年國內主要觀光遊憩據點遊客人數月別統計.xlsx", sheet_name="2019")

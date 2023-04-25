@@ -10,7 +10,7 @@ class Video_File:
 
         self.total_interrupt_count = 0
         self.interrupt_list = []
-        
+
         self.total_revised_interrupt_count = 0
         self.revised_interrupt_list = []
 
@@ -27,6 +27,8 @@ class Video_File:
 
         self.resultFile = open(self.filename + ".txt", "w")
         self.wb = openpyxl.load_workbook('Result.xlsx')
+
+
 
 
     def write_result_to_file(self): ## write result to file ##
