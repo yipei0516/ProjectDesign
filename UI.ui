@@ -13,6 +13,12 @@
     <height>850</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -458,6 +464,14 @@ border-style:outset;
     </property>
     <property name="text">
      <string>Import Result</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_done">
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>

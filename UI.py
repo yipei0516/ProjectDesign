@@ -16,6 +16,11 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
         MainWindow.resize(1500, 850)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
+        MainWindow.setSizePolicy(sizePolicy)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.button_start_judge = QtWidgets.QPushButton(self.centralwidget)
@@ -219,6 +224,9 @@ class Ui_MainWindow(object):
 "border-style:outset;\n"
 "")
         self.button_import_result.setObjectName("button_import_result")
+        self.label_done = QtWidgets.QLabel(self.centralwidget)
+        self.label_done.setScaledContents(True)
+        self.label_done.setObjectName("label_done")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -241,3 +249,4 @@ class Ui_MainWindow(object):
         self.button_check_result.setText(_translate("MainWindow", "✅Check result✅"))
         self.button_remove_interrupt.setText(_translate("MainWindow", "remove interrupt ❌"))
         self.button_import_result.setText(_translate("MainWindow", "Import Result"))
+        self.label_done.setText(_translate("MainWindow", "TextLabel"))

@@ -45,6 +45,8 @@ class Video_File:
                              "\t\t(" + str(start_normal_time["minute"]).zfill(2) + ": " + str(start_normal_time["second"]).zfill(2) + ")" + 
                              "\t\t" + str(self.interrupt_list[i]["end_frame"]) +
                              "\t\t(" + str(end_normal_time["minute"]).zfill(2) + ": " + str(end_normal_time["second"]).zfill(2) + ")\n")
+            
+        self.resultFile.close()
 
 
     def write_result_to_excel(self): ## write result to excel ##

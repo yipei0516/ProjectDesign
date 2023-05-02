@@ -6,6 +6,9 @@ from VideoController import video_controller
 import cv2 as cv 
 import os
 import re
+from pydub import AudioSegment            # 載入 pydub 的 AudioSegment 模組
+from pydub.playback import play           # 載入 pydub.playback 的 play 模組
+from playsound import playsound
 
 class MainWindow_controller(QtWidgets.QMainWindow):
     def __init__(self):
@@ -25,7 +28,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.ui.list_widget_interrupt.itemClicked.connect(self.choose_remove_interrupt) # 單擊interrupt時，選取起來準備刪除
         self.ui.button_remove_interrupt.clicked.connect(self.remove_interrupt)
 
-        self.ui.button_import_result.clicked.connect(self.import_result_file)
+        # self.ui.button_import_result.clicked.connect(self.import_result_file)
     
         
 
@@ -74,24 +77,37 @@ class MainWindow_controller(QtWidgets.QMainWindow):
     
     ### Start Judge
     def clicked_start_judge(self):
-        
-        ##### Step1. start judge #####
-        judge.start_judge(file=self.video_file, cap=self.vc, fps=self.video_fps)
-        judge.revise_interrupt(file=self.video_file)
 
-        ##### Step2. write result to file #####
-        self.video_file.write_result_to_file()    
+        if self.first_file is True: ## 尚未第一次進入
+            print("選video!!")
+            mbox = QtWidgets.QMessageBox(self.ui.centralwidget) # 跳出警告訊息
+            mbox.setIcon(QtWidgets.QMessageBox.Warning)
+            mbox.setText("請先選擇要偵測的手術片段")
+            mbox.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            mbox.exec()
+        else:
+            ##### Step1. start judge #####
+            judge.start_judge(file=self.video_file, cap=self.vc, fps=self.video_fps)
+            judge.revise_interrupt(file=self.video_file)
 
-        ##### Step3. write result to excel #####
-        self.video_file.write_result_to_excel()  
-            
-        ##### Step4. print result to UI #####
-        # record interrupt times, wrong judge times, accuracy
-        self.wrongJudgeTimes = 0        # 目前沒這個資訊
-        self.accuracy = 0               # 有了total_interrupt_count跟wrongJudgeTimes就可算accuracy
-        self.ui.label_interrupt_times.setText("Interrupt Times:   " + str(self.video_file.total_revised_interrupt_count))
+            ##### Step2. write result to file #####
+            self.video_file.write_result_to_file()    
 
+            ##### Step3. write result to excel #####
+            self.video_file.write_result_to_excel()  
+                
+            ##### Step4. print result to UI #####
+            # record interrupt times, wrong judge times, accuracy
+            self.wrongJudgeTimes = 0        # 目前沒這個資訊
+            self.accuracy = 0               # 有了total_interrupt_count跟wrongJudgeTimes就可算accuracy
+            self.ui.label_interrupt_times.setText("Interrupt Times:   " + str(self.video_file.total_revised_interrupt_count))
 
+            self.movie = QtGui.QMovie("image\giphy.gif")
+            self.ui.label_done.setMovie(self.movie)
+            self.movie.start()
+
+            song = AudioSegment.from_mp3("sound\done.mp3")  # 開啟聲音檔案
+            play(song)                                      # 播放聲音
 
     def show_result(self):
 
@@ -159,5 +175,5 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.video_file.delete_excel_row(self.remove_item_index)
 
 
-    def import_result_file(self):
-        df = pd.read_excel("歷年國內主要觀光遊憩據點遊客人數月別統計.xlsx", sheet_name="2019")
+    # def import_result_file(self):
+    #     df = pd.read_excel("歷年國內主要觀光遊憩據點遊客人數月別統計.xlsx", sheet_name="2019")
