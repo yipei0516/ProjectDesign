@@ -6,9 +6,9 @@ from VideoController import video_controller
 import cv2 as cv 
 import os
 import re
-from pydub import AudioSegment            # 載入 pydub 的 AudioSegment 模組
-from pydub.playback import play           # 載入 pydub.playback 的 play 模組
-from playsound import playsound
+from pydub import AudioSegment
+from pydub.playback import play
+import openpyxl
 
 class MainWindow_controller(QtWidgets.QMainWindow):
     def __init__(self):
@@ -28,7 +28,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.ui.list_widget_interrupt.itemClicked.connect(self.choose_remove_interrupt) # 單擊interrupt時，選取起來準備刪除
         self.ui.button_remove_interrupt.clicked.connect(self.remove_interrupt)
 
-        # self.ui.button_import_result.clicked.connect(self.import_result_file)
+        self.ui.button_import_result.clicked.connect(self.performance)
     
         
 
@@ -36,42 +36,58 @@ class MainWindow_controller(QtWidgets.QMainWindow):
     def clicked_choose_video(self):
 
         filepath, filetype = QtWidgets.QFileDialog.getOpenFileName()
+        if filepath == '':
+            pass
+        else:
+            if self.first_file: ## 第一次進入
+                self.first_file = False
+            else: ## 非第一次進入
+                opencv_engine.release_video(self.vc)
 
-        if self.first_file: ## 第一次進入
-            self.first_file = False
-        else: ## 非第一次進入
-            opencv_engine.release_video(self.vc)
+            self.videoinfo = opencv_engine.get_video_info(filepath)
+            self.vc = self.videoinfo["vc"]
+            self.video_filename = self.videoinfo["video_name"]
+            self.video_fps = self.videoinfo["fps"]
 
-        self.videoinfo = opencv_engine.get_video_info(filepath)
-        self.vc = self.videoinfo["vc"]
-        self.video_filename = self.videoinfo["video_name"]
-        self.video_fps = self.videoinfo["fps"]
+            if not self.vc.isOpened():
+                print("Cannot open camera")
+                exit()
 
-        if not self.vc.isOpened():
-            print("Cannot open camera")
-            exit()
+            self.ui.label_video_name.setText("Video Name:   " + self.video_filename)
+            
+            self.video_file = Video_File(filepath=filepath, filename=self.video_filename) # 創一個Video_File class叫做file!!!!!!!!!!!!!
 
-        self.ui.label_video_name.setText("Video Name:   " + self.video_filename)
-        
-        self.video_file = Video_File(filepath=filepath, filename=self.video_filename) # 創一個Video_File class叫做file!!!!!!!!!!!!!
-
-        if self.video_filename in self.video_file.wb.sheetnames:
-            print("TRUE")
-
-        if self.video_filename in self.video_file.wb.sheetnames:
-            mbox = QtWidgets.QMessageBox(self.ui.centralwidget) # 跳出警告訊息
-            mbox.setIcon(QtWidgets.QMessageBox.Warning)
-            mbox.setText("你已經測試過此手術片段，是否要重新測?")
-            # 添加三顆按鈕
-            mbox.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-            # 設定預設按鈕
-            mbox.setDefaultButton(QtWidgets.QMessageBox.No)
-            ret = mbox.exec()                      # 取得點擊的按鈕數字
-            if ret == QtWidgets.QMessageBox.Yes:
-                print("YES")
-            elif ret == QtWidgets.QMessageBox.No:
-                print("NO")
-                return
+            if self.video_filename in self.video_file.wb.sheetnames:
+                repeated_sheet = self.video_file.wb[self.video_filename]
+                mbox = QtWidgets.QMessageBox(self.ui.centralwidget) # 跳出警告訊息
+                mbox.setIcon(QtWidgets.QMessageBox.Warning)
+                mbox.setText("你已經測試過此手術片段，是否要重新測?")
+                # 添加三顆按鈕
+                mbox.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+                # 設定預設按鈕
+                mbox.setDefaultButton(QtWidgets.QMessageBox.No)
+                ret = mbox.exec()                      # 取得點擊的按鈕數字
+                if ret == QtWidgets.QMessageBox.Yes:
+                    # 刪除前一個judge的結果
+                    self.video_file.wb.remove_sheet(repeated_sheet)
+                    self.video_file.wb.save('Result.xlsx')
+                    print("YES")
+                elif ret == QtWidgets.QMessageBox.No:
+                    # 跳出上次的結果
+                    rows = repeated_sheet.max_row
+                    self.video_file.total_revised_interrupt_count = rows - 5
+                    start_frame = repeated_sheet['B']
+                    end_frame = repeated_sheet['D']
+                    label = repeated_sheet['F']
+                    
+                    for i in range(self.video_file.total_revised_interrupt_count):
+                        interrupt_info = {}
+                        interrupt_info["start_frame"] = int(start_frame[i+1].value)
+                        interrupt_info["start_time"] = round(interrupt_info["start_frame"]/self.video_fps, 1)
+                        interrupt_info["end_frame"] = int(end_frame[i+1].value)
+                        interrupt_info["end_time"] = round(interrupt_info["end_frame"]/self.video_fps, 1)
+                        interrupt_info["label"] = label[i+1].value
+                        self.video_file.revised_interrupt_list.append(interrupt_info)          
         
 
     
@@ -102,14 +118,15 @@ class MainWindow_controller(QtWidgets.QMainWindow):
             self.accuracy = 0               # 有了total_interrupt_count跟wrongJudgeTimes就可算accuracy
             self.ui.label_interrupt_times.setText("Interrupt Times:   " + str(self.video_file.total_revised_interrupt_count))
 
-            self.movie = QtGui.QMovie("image\giphy.gif")
+            self.movie = QtGui.QMovie("image/giphy.gif")
             self.ui.label_done.setMovie(self.movie)
             self.movie.start()
 
-            song = AudioSegment.from_mp3("sound\done.mp3")  # 開啟聲音檔案
+            song = AudioSegment.from_mp3("sound/done.mp3")  # 開啟聲音檔案
             play(song)                                      # 播放聲音
 
     def show_result(self):
+        self.ui.list_widget_interrupt.clear()
 
         ##### Step1. show result in list widget #####
         # 將interrupt frame加入list widget裡
@@ -175,5 +192,44 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.video_file.delete_excel_row(self.remove_item_index)
 
 
-    # def import_result_file(self):
-    #     df = pd.read_excel("歷年國內主要觀光遊憩據點遊客人數月別統計.xlsx", sheet_name="2019")
+    def performance(self):
+        filePath, filterType = QtWidgets.QFileDialog.getOpenFileNames()  # 選取多個檔案
+        wb = openpyxl.load_workbook('Result.xlsx')
+        one_day_sheets = []
+        filename = []
+        each_interrupt_number = []
+        one_day_interrupt_number = 0
+        for i in range(len(filePath)):
+            basename = os.path.basename(filePath[i])
+            filename.append(os.path.splitext(basename)[0])
+            one_day_sheets.append(wb[filename[i]])
+            rows = one_day_sheets[i].max_row
+            each_interrupt_number.append(rows - 5)
+            one_day_interrupt_number += each_interrupt_number[i]
+        video_total_time = 7383
+        
+        score = one_day_interrupt_number/(video_total_time/60/9)
+        performance = '-'
+        if 0 <= score < 1:
+            performance = 'A+'
+        elif 1 <= score < 3:
+            performance = 'A'
+        elif 3 <= score < 4:
+            performance = 'A-'
+        elif 4 <= score < 5:
+            performance = 'B+'
+        elif 5 <= score < 7:
+            performance = 'B'
+        elif 7 <= score < 8:
+            performance = 'B-'
+        elif 8 <= score < 9:
+            performance = 'C+'
+        elif 9 <= score < 11:
+            performance = 'C'
+        elif 11 <= score < 12:
+            performance = 'C-'
+        elif 12 <= score:
+            performance = 'D'
+        self.ui.label_performance.setText(str(performance))
+            
+        

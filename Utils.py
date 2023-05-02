@@ -91,11 +91,11 @@ class judge(object):
                     #         gb_dominate_pixels += 1
                     bg_max = max(b[i, j], g[i, j])
                     average = ((int)(b[i, j]) + (int)(g[i, j]) + (int)(r[i, j])) / 3
-                    if(r[i, j] > bg_max):
+                    if(abs(average - (int)(r[i, j])) < 12 and abs(average - (int)(b[i, j])) < 12 and abs(average - (int)(g[i, j])) < 12):
+                        file.resultFile.write("[  s ] ")
+                    elif(r[i, j] > bg_max):
                         file.resultFile.write("[  r ] ")
                         r_dominate_pixels += 1
-                    elif(abs(average - (int)(r[i, j])) < 12 and abs(average - (int)(b[i, j])) < 12 and abs(average - (int)(g[i, j])) < 12):
-                        file.resultFile.write("[  s ] ")
                     else:
                         file.resultFile.write("[ gb ] ")
                         gb_dominate_pixels += 1
@@ -116,13 +116,13 @@ class judge(object):
                         tmp_count_frame += 1
                         count_frame += 1
                     elif(tmp_flag == True) and (tmp_count_frame >= 20):
-                        if(count_frame - tmp_count_frame >= 10):
+                        if(count_frame - tmp_count_frame >= 8):
                             end_flag = True
                         else:
                             count_frame = 0
                         tmp_flag = False
                         count_flag = False
-                    elif(tmp_flag == False) and (count_frame >= 10):
+                    elif(tmp_flag == False) and (count_frame >= 8):
                         tmp_flag = True
                         tmp_count_frame += 1
                         count_frame += 1
@@ -224,30 +224,3 @@ class judge(object):
                     file.total_revised_interrupt_count += 1
                     interrupt_info = file.interrupt_list[p2]
                     file.revised_interrupt_list.append(interrupt_info)
-
-
-    # def revise_interrupt(file):
-    #     if file.total_interrupt_count != 0:
-    #         file.revised_interrupt_list.append(file.interrupt_list[0])
-    #         file.total_revised_interrupt_count += 1
-
-    #     interrupt_info = {}
-
-    #     for i in range(1, file.total_interrupt_count):
-    #         interrupt_info["start_frame"] = file.interrupt_list[file.total_revised_interrupt_count-1]["start_frame"]
-    #         interrupt_info["start_time"] = file.interrupt_list[file.total_revised_interrupt_count-1]["start_time"]
-    #         if file.interrupt_list[i]['start_frame'] - file.interrupt_list[i-1]['end_frame'] <= 100:
-    #             interrupt_info["label"] = 'B'
-    #             interrupt_info["end_frame"] = file.interrupt_list[i]["end_frame"]
-    #             interrupt_info["end_time"] = file.interrupt_list[i]["end_time"]
-
-    #             # file.revised_interrupt_list[len(file.revised_interrupt_list)-1]["end_frame"] = file.interrupt_list[i]["end_frame"]
-    #             # file.revised_interrupt_list[len(file.revised_interrupt_list)-1]["end_time"] = file.interrupt_list[i]["end_time"]
-    #             # file.revised_interrupt_list[len(file.revised_interrupt_list)-1]["label"] = 'B'
-
-    #             # file.interrupt_list[i]["label"] = 'B'
-    #         else:
-    #             interrupt_info = file.interrupt_list[i]
-    #             file.revised_interrupt_list.append(interrupt_info)
-
-    #     file.total_revised_interrupt_count = len(file.revised_interrupt_list)

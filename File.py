@@ -27,6 +27,7 @@ class Video_File:
 
         self.resultFile = open(self.filename + ".txt", "w")
         self.wb = openpyxl.load_workbook('Result.xlsx')
+        self.wb_2 = openpyxl.load_workbook('Original_Result.xlsx')
 
 
 
@@ -85,21 +86,34 @@ class Video_File:
             data = [interrupt_name, start_frame_name, start_time_name, end_frame_name, end_time_name, label_name]
             ws1.append(data)
 
-        for i in range(3):
+        for i in range(2):
             ws1.append(['', '', '', '', '', ''])
 
-        ##### 2. 印出手術總中斷時長 #####
+        ##### 2. 印出手術總中斷次數 #####
+        total_interrupt_number_name = str(self.total_revised_interrupt_count)
+
+        data = ['總手術中段次數', total_interrupt_number_name, '', '', '', '']
+        ws1.append(data)
+
+        ##### 3. 印出手術總中斷時長 #####
         total_normal_time = compute.get_normal_time_info(time_in_seconds=self.total_interrupt_time)
         total_time_name = str(total_normal_time["minute"]).zfill(2) + ": " + str(total_normal_time["second"]).zfill(2)
 
         data = ['總手術中段時間', total_time_name, '', '', '', '']
         ws1.append(data)
 
-        for i in range(3):
-            ws1.append(['', '', '', '', '', ''])
+        self.wb.save('Result.xlsx')
 
 
-         ##### 3. 印出原本 interrupt #####
+        ##### 4. 印出原本 interrupt #####
+        ws2 = self.wb_2.create_sheet(name)
+        ws2['A1'].value = name
+        ws2['B1'].value = 'Start Frame #'
+        ws2['C1'].value = 'Start Time'
+        ws2['D1'].value = 'End Frame #'
+        ws2['E1'].value = 'End Time'
+        ws2['F1'].value = 'Label'
+        
         for i in range(self.total_interrupt_count):
             interrupt_name = 'Interrupt#' + str(i)
             
@@ -117,9 +131,9 @@ class Video_File:
             label_name = self.interrupt_list[i]["label"]
             
             data = [interrupt_name, start_frame_name, start_time_name, end_frame_name, end_time_name, label_name]
-            ws1.append(data)
+            ws2.append(data)
 
-        self.wb.save('Result.xlsx')
+        self.wb_2.save('Original_Result.xlsx')
 
 
     def delete_excel_row(self, remove_interrupt_index):
