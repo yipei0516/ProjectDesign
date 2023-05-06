@@ -24,21 +24,31 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.button_start_judge = QtWidgets.QPushButton(self.centralwidget)
-        self.button_start_judge.setGeometry(QtCore.QRect(150, 140, 220, 60))
+        self.button_start_judge.setEnabled(True)
+        self.button_start_judge.setGeometry(QtCore.QRect(60, 210, 220, 60))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
         font.setPointSize(14)
         font.setBold(True)
         font.setWeight(75)
         self.button_start_judge.setFont(font)
-        self.button_start_judge.setStyleSheet("color: rgb(255, 255, 255);\n"
-"background-color: rgb(190, 184, 171);\n"
-"border-radius: 20px;\n"
-"border: 1px groove gray;\n"
-"border-style:outset;")
+        self.button_start_judge.setStyleSheet("QPushButton {\n"
+"    color: rgb(255, 255, 255);\n"
+"    background-color: rgb(190, 184, 171);\n"
+"    border-radius: 20px;\n"
+"    border: 1px groove gray;\n"
+"    border-style:outset;\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    color:#fff;\n"
+"    background:#ccc;\n"
+"    border-radius: 20px;\n"
+"    border: 1px solid gray;\n"
+"    border-style:outset;\n"
+"}")
         self.button_start_judge.setObjectName("button_start_judge")
         self.button_choose_video = QtWidgets.QPushButton(self.centralwidget)
-        self.button_choose_video.setGeometry(QtCore.QRect(150, 60, 220, 60))
+        self.button_choose_video.setGeometry(QtCore.QRect(60, 130, 220, 60))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
         font.setPointSize(14)
@@ -52,7 +62,7 @@ class Ui_MainWindow(object):
 "border-style:outset;")
         self.button_choose_video.setObjectName("button_choose_video")
         self.label_video_name = QtWidgets.QLabel(self.centralwidget)
-        self.label_video_name.setGeometry(QtCore.QRect(60, 309, 380, 50))
+        self.label_video_name.setGeometry(QtCore.QRect(70, 10, 380, 50))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
         font.setPointSize(14)
@@ -63,7 +73,7 @@ class Ui_MainWindow(object):
         self.label_video_name.setWordWrap(True)
         self.label_video_name.setObjectName("label_video_name")
         self.label_interrupt_times = QtWidgets.QLabel(self.centralwidget)
-        self.label_interrupt_times.setGeometry(QtCore.QRect(60, 370, 380, 50))
+        self.label_interrupt_times.setGeometry(QtCore.QRect(70, 70, 380, 50))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
         font.setPointSize(14)
@@ -74,7 +84,7 @@ class Ui_MainWindow(object):
         self.label_interrupt_times.setWordWrap(True)
         self.label_interrupt_times.setObjectName("label_interrupt_times")
         self.list_widget_interrupt = QtWidgets.QListWidget(self.centralwidget)
-        self.list_widget_interrupt.setGeometry(QtCore.QRect(70, 450, 241, 351))
+        self.list_widget_interrupt.setGeometry(QtCore.QRect(110, 440, 270, 371))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
         font.setBold(True)
@@ -82,22 +92,31 @@ class Ui_MainWindow(object):
         self.list_widget_interrupt.setFont(font)
         self.list_widget_interrupt.setObjectName("list_widget_interrupt")
         self.button_check_result = QtWidgets.QPushButton(self.centralwidget)
-        self.button_check_result.setGeometry(QtCore.QRect(150, 230, 220, 60))
+        self.button_check_result.setEnabled(True)
+        self.button_check_result.setGeometry(QtCore.QRect(60, 300, 220, 60))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
         font.setPointSize(14)
         font.setBold(True)
         font.setWeight(75)
         self.button_check_result.setFont(font)
-        self.button_check_result.setStyleSheet("color: rgb(255, 255, 255);\n"
-"background-color: rgb(190, 184, 171);\n"
-"border-radius: 20px;\n"
-"border: 1px groove gray;\n"
-"border-style:outset;\n"
-"")
+        self.button_check_result.setStyleSheet("QPushButton {\n"
+"    color: rgb(255, 255, 255);\n"
+"    background-color: rgb(190, 184, 171);\n"
+"    border-radius: 20px;\n"
+"    border: 1px groove gray;\n"
+"    border-style:outset;\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    color:#fff;\n"
+"    background:#ccc;\n"
+"    border-radius: 20px;\n"
+"    border: 1px solid gray;\n"
+"    border-style:outset;\n"
+"}")
         self.button_check_result.setObjectName("button_check_result")
         self.button_remove_interrupt = QtWidgets.QPushButton(self.centralwidget)
-        self.button_remove_interrupt.setGeometry(QtCore.QRect(330, 750, 170, 35))
+        self.button_remove_interrupt.setGeometry(QtCore.QRect(410, 770, 170, 35))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
         font.setPointSize(10)
@@ -111,7 +130,7 @@ class Ui_MainWindow(object):
 "border-style:outset;")
         self.button_remove_interrupt.setObjectName("button_remove_interrupt")
         self.button_import_result = QtWidgets.QPushButton(self.centralwidget)
-        self.button_import_result.setGeometry(QtCore.QRect(340, 530, 220, 60))
+        self.button_import_result.setGeometry(QtCore.QRect(340, 210, 220, 60))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
         font.setPointSize(14)
@@ -126,20 +145,40 @@ class Ui_MainWindow(object):
 "")
         self.button_import_result.setObjectName("button_import_result")
         self.label_done = QtWidgets.QLabel(self.centralwidget)
-        self.label_done.setGeometry(QtCore.QRect(470, 140, 47, 12))
+        self.label_done.setGeometry(QtCore.QRect(1040, 10, 291, 141))
         self.label_done.setScaledContents(True)
         self.label_done.setObjectName("label_done")
         self.label_performance = QtWidgets.QLabel(self.centralwidget)
-        self.label_performance.setGeometry(QtCore.QRect(420, 290, 141, 171))
+        self.label_performance.setGeometry(QtCore.QRect(890, 590, 170, 170))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
-        font.setPointSize(48)
+        font.setPointSize(72)
         font.setBold(True)
         font.setWeight(75)
         self.label_performance.setFont(font)
         self.label_performance.setStyleSheet("color: rgb(255, 0, 0);")
         self.label_performance.setAlignment(QtCore.Qt.AlignCenter)
         self.label_performance.setObjectName("label_performance")
+        self.label_text = QtWidgets.QLabel(self.centralwidget)
+        self.label_text.setGeometry(QtCore.QRect(820, 550, 380, 50))
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_text.setFont(font)
+        self.label_text.setScaledContents(True)
+        self.label_text.setWordWrap(True)
+        self.label_text.setObjectName("label_text")
+        self.comboBox_choose_video = QtWidgets.QComboBox(self.centralwidget)
+        self.comboBox_choose_video.setGeometry(QtCore.QRect(110, 390, 270, 30))
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.comboBox_choose_video.setFont(font)
+        self.comboBox_choose_video.setObjectName("comboBox_choose_video")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -154,6 +193,7 @@ class Ui_MainWindow(object):
         self.label_interrupt_times.setText(_translate("MainWindow", "Interrupt Times:"))
         self.button_check_result.setText(_translate("MainWindow", "✅Check result✅"))
         self.button_remove_interrupt.setText(_translate("MainWindow", "remove interrupt ❌"))
-        self.button_import_result.setText(_translate("MainWindow", "Import Result"))
-        self.label_done.setText(_translate("MainWindow", "TextLabel"))
+        self.button_import_result.setText(_translate("MainWindow", "Import Result "))
+        self.label_done.setText(_translate("MainWindow", "DoneLabel"))
         self.label_performance.setText(_translate("MainWindow", "A+"))
+        self.label_text.setText(_translate("MainWindow", "Perormance: "))
