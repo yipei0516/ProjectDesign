@@ -1,7 +1,7 @@
 import numpy as np
 import openpyxl
 import os
-from Utils import compute
+from Utils import opencv_engine
 
 class Video_File:
     def __init__(self, filepath, filename):
@@ -18,6 +18,8 @@ class Video_File:
         self.total_interrupt_time = 0
 
         self.total_time = 0
+
+        self.videoinfo = opencv_engine.get_video_info(video_path=filepath)
         # list裡面為的東西為dictionary(包含：start time、end time等等)
         # interrupt_list = [ 第一個interrupt_info, 第二個interrupt_info, 第三個interrupt_info .....]
         # interrupt_list[0] = interrupt_info = {

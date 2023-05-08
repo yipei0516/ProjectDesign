@@ -57,9 +57,8 @@ class compute(object):
 
 class judge(object):
     def start_judge(file):
-        videoinfo = opencv_engine.get_video_info(video_path=file.filepath)
-        cap = videoinfo["vc"]
-        fps = videoinfo["fps"]
+        cap = file.videoinfo["vc"]
+        fps = file.videoinfo["fps"]
 
         ## parameter setting ##
         limit = 20      # count_frame的上限 = fake_count的上限 = 20
@@ -230,3 +229,33 @@ class judge(object):
                     file.total_revised_interrupt_count += 1
                     interrupt_info = file.interrupt_list[p2]
                     file.revised_interrupt_list.append(interrupt_info)
+
+
+    def performance(oneday_dir):
+        oneday_interrupt_count = oneday_dir.oneday_interrupt_count
+        oneday_total_time = oneday_dir.oneday_total_time
+
+        score = oneday_interrupt_count/(oneday_total_time/60/9)
+        performance = '-'
+        if 0 <= score < 1:
+            performance = 'A+'
+        elif 1 <= score < 3:
+            performance = 'A'
+        elif 3 <= score < 4:
+            performance = 'A-'
+        elif 4 <= score < 5:
+            performance = 'B+'
+        elif 5 <= score < 7:
+            performance = 'B'
+        elif 7 <= score < 8:
+            performance = 'B-'
+        elif 8 <= score < 9:
+            performance = 'C+'
+        elif 9 <= score < 11:
+            performance = 'C'
+        elif 11 <= score < 12:
+            performance = 'C-'
+        elif 12 <= score:
+            performance = 'D'
+
+        return performance

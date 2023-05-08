@@ -19,6 +19,13 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="font">
+   <font>
+    <family>微軟正黑體</family>
+    <weight>75</weight>
+    <bold>true</bold>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -37,8 +44,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Arial Black</family>
-      <pointsize>14</pointsize>
+      <family>微軟正黑體</family>
+      <pointsize>16</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -60,7 +67,7 @@ QPushButton:disabled {
 }</string>
     </property>
     <property name="text">
-     <string>❗Start Judge❗</string>
+     <string>❗開始偵測❗</string>
     </property>
    </widget>
    <widget class="QPushButton" name="button_choose_video">
@@ -74,8 +81,8 @@ QPushButton:disabled {
     </property>
     <property name="font">
      <font>
-      <family>Arial Black</family>
-      <pointsize>14</pointsize>
+      <family>微軟正黑體</family>
+      <pointsize>16</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -88,28 +95,28 @@ border: 1px groove gray;
 border-style:outset;</string>
     </property>
     <property name="text">
-     <string>👆🏻 Choose Video 👆🏻</string>
+     <string>👆🏻 選擇資料夾 👆🏻</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_video_name">
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>10</y>
-      <width>380</width>
+      <y>50</y>
+      <width>491</width>
       <height>50</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Arial Black</family>
-      <pointsize>14</pointsize>
+      <family>微軟正黑體</family>
+      <pointsize>16</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
     <property name="text">
-     <string>Video Name: </string>
+     <string>資料夾名稱:   尚未選擇資料夾</string>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -121,7 +128,7 @@ border-style:outset;</string>
    <widget class="QLabel" name="label_interrupt_times">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>680</x>
       <y>70</y>
       <width>380</width>
       <height>50</height>
@@ -129,14 +136,14 @@ border-style:outset;</string>
     </property>
     <property name="font">
      <font>
-      <family>Arial Black</family>
-      <pointsize>14</pointsize>
+      <family>微軟正黑體</family>
+      <pointsize>16</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
     <property name="text">
-     <string>Interrupt Times:</string>
+     <string>總中斷次數:   尚未進行偵測</string>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -156,7 +163,7 @@ border-style:outset;</string>
     </property>
     <property name="font">
      <font>
-      <family>Arial Black</family>
+      <family>微軟正黑體</family>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -176,8 +183,8 @@ border-style:outset;</string>
     </property>
     <property name="font">
      <font>
-      <family>Arial Black</family>
-      <pointsize>14</pointsize>
+      <family>微軟正黑體</family>
+      <pointsize>16</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -199,7 +206,7 @@ QPushButton:disabled {
 }</string>
     </property>
     <property name="text">
-     <string>✅Check result✅</string>
+     <string>✅確認結果✅</string>
     </property>
    </widget>
    <widget class="QPushButton" name="button_remove_interrupt">
@@ -213,10 +220,10 @@ QPushButton:disabled {
     </property>
     <property name="font">
      <font>
-      <family>Arial Black</family>
-      <pointsize>10</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <family>微軟正黑體</family>
+      <pointsize>12</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
@@ -227,7 +234,7 @@ border: 1px groove gray;
 border-style:outset;</string>
     </property>
     <property name="text">
-     <string>remove interrupt ❌</string>
+     <string>刪除此中斷點 ❌</string>
     </property>
    </widget>
    <widget class="QPushButton" name="button_import_result">
@@ -241,8 +248,8 @@ border-style:outset;</string>
     </property>
     <property name="font">
      <font>
-      <family>Arial Black</family>
-      <pointsize>14</pointsize>
+      <family>微軟正黑體</family>
+      <pointsize>16</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -256,30 +263,33 @@ border-style:outset;
 </string>
     </property>
     <property name="text">
-     <string>Import Result </string>
+     <string>引入</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_done">
     <property name="geometry">
      <rect>
-      <x>1040</x>
+      <x>1120</x>
       <y>10</y>
-      <width>291</width>
-      <height>141</height>
+      <width>211</width>
+      <height>131</height>
      </rect>
     </property>
     <property name="text">
-     <string>DoneLabel</string>
+     <string/>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="label_performance">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>890</x>
-      <y>590</y>
+      <x>800</x>
+      <y>190</y>
       <width>170</width>
       <height>170</height>
      </rect>
@@ -296,31 +306,34 @@ border-style:outset;
      <string notr="true">color: rgb(255, 0, 0);</string>
     </property>
     <property name="text">
-     <string>A+</string>
+     <string/>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_text">
+   <widget class="QLabel" name="label_performance_text">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>550</y>
+      <x>680</x>
+      <y>140</y>
       <width>380</width>
       <height>50</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Arial Black</family>
-      <pointsize>14</pointsize>
+      <family>微軟正黑體</family>
+      <pointsize>16</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
     <property name="text">
-     <string>Perormance: </string>
+     <string>表現評分:   尚未進行偵測</string>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -340,7 +353,7 @@ border-style:outset;
     </property>
     <property name="font">
      <font>
-      <family>Arial Black</family>
+      <family>微軟正黑體</family>
       <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>

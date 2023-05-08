@@ -2,15 +2,13 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from UI import Ui_MainWindow
 from Directory import Directory
 from File import Video_File
-from Utils import judge, compute, opencv_engine, excel
+from Utils import judge, compute, opencv_engine
 from VideoController import video_controller
 import cv2 as cv 
 import os
-import re
 from pydub import AudioSegment
 from pydub.playback import play
 import openpyxl
-import pandas as pd
 
 class MainWindow_controller(QtWidgets.QMainWindow):
     def __init__(self):
@@ -31,7 +29,6 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.ui.list_widget_interrupt.itemClicked.connect(self.choose_remove_interrupt) # 單擊interrupt時，選取起來準備刪除
         self.ui.button_remove_interrupt.clicked.connect(self.remove_interrupt)
 
-        self.ui.button_import_result.clicked.connect(self.performance)
 
         self.ui.comboBox_choose_video.currentIndexChanged.connect(self.change_list_widget)
     
@@ -51,9 +48,16 @@ class MainWindow_controller(QtWidgets.QMainWindow):
             oneday_video_name = []
             for file in all_file_name:
                 if os.path.splitext(file)[1] == ".mp4": # 若是影片檔才能當作一個file
+                    # step1. 先新增成多個video_file檔
+                    filepath = dir_path + "/" + file
                     filename = os.path.splitext(file)[0]
-                    oneday_video_name.append(filename)
+                    video_file = Video_File(filepath=filepath, filename=filename)
+                    self.oneday_dir.video_file_list.append(video_file)
                     self.oneday_dir.video_count += 1
+                    self.oneday_dir.oneday_total_time += round(video_file.videoinfo['frame_count']/video_file.videoinfo['fps'], 1) # 記錄總影片時長(in seconds)
+
+                    # step2. 再準備待會要檢查有沒有重複偵測的部分
+                    oneday_video_name.append(filename)
             # Step2. 再確認是否偵測過此Directory!
             if dir_name in self.oneday_dir.wb.sheetnames:
                 repeated_sheet = self.oneday_dir.wb[dir_name]
@@ -69,21 +73,22 @@ class MainWindow_controller(QtWidgets.QMainWindow):
                     # 刪除前一個judge的結果
                     self.oneday_dir.wb.remove_sheet(repeated_sheet)
                     self.oneday_dir.wb.save('Result.xlsx')
+                    self.ui.button_start_judge.setDisabled(False)
+                    self.ui.button_check_result.setDisabled(True)
                 elif ret == QtWidgets.QMessageBox.No:
                     # 跳出上次的結果
-                    self.oneday_dir.oneday_interrupt_count = repeated_sheet['B'+str(repeated_sheet.max_row-1)]
+                    self.oneday_dir.oneday_interrupt_count = int(repeated_sheet['B'+str(repeated_sheet.max_row-3)].value)
+                    self.oneday_dir.oneday_interrupt_time = compute.normal_time_to_seconds(repeated_sheet['B'+str(repeated_sheet.max_row-2)].value)
+                    self.oneday_dir.oneday_performance = repeated_sheet['B'+str(repeated_sheet.max_row)].value
                     A_col = repeated_sheet['A']
                     start_time = repeated_sheet['B']
                     end_time = repeated_sheet['C']
                     video_index = 0
                     for i in range(2, len(A_col)): # 跳過第一行
-                        if A_col[i].value == '總手術中斷次數':
+                        if A_col[i].value == '手術總中斷次數':
                             break
                         elif video_index < self.oneday_dir.video_count and A_col[i].value == oneday_video_name[video_index]:
-                            filepath = dir_path + "/" + all_file_name[video_index]
-                            filename = oneday_video_name[video_index]
-                            video_file = Video_File(filepath=filepath, filename=filename)
-                            self.oneday_dir.video_file_list.append(video_file)
+                            video_file = self.oneday_dir.video_file_list[video_index]
                             video_index += 1
                         elif (A_col[i].value is not None) and (A_col[i].value != 'No interrupt') :
                             interrupt_info = {}
@@ -91,56 +96,53 @@ class MainWindow_controller(QtWidgets.QMainWindow):
                             interrupt_info["end_time"] = compute.normal_time_to_seconds(end_time[i].value)
                             video_file.revised_interrupt_list.append(interrupt_info)
                             video_file.total_revised_interrupt_count += 1
+                    self.ui.button_start_judge.setDisabled(True)
                     self.ui.button_check_result.setDisabled(False)
             else:
                 self.ui.button_start_judge.setDisabled(False)
+                self.ui.button_check_result.setDisabled(True)
 
-            self.ui.label_video_name.setText("Video Name:   " + dir_name)
+            self.ui.label_video_name.setText("資料夾名稱:   " + dir_name)
             
 
     
     ### Start Judge
     def clicked_start_judge(self):
-
-        # if self.first_file is True: ## 尚未第一次進入
-        #     print("選video!!")
-        #     mbox = QtWidgets.QMessageBox(self.ui.centralwidget) # 跳出警告訊息
-        #     mbox.setIcon(QtWidgets.QMessageBox.Warning)
-        #     mbox.setText("請先選擇要偵測的手術片段")
-        #     mbox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-        #     mbox.exec()
-        # else:
-            for video in self.oneday_dir.video_file_list:
-                ##### Step1. start judge #####
-                judge.start_judge(file=video)
-                judge.revise_interrupt(file=video)
+        for video in self.oneday_dir.video_file_list:
+            ##### Step1. start judge #####
+            judge.start_judge(file=video)
+            judge.revise_interrupt(file=video)
 
 
-                ##### Step2. write result to file #####
-                # video.write_result_to_file()
+            ##### Step2. write result to file #####
+            # video.write_result_to_file()
 
 
-            ##### Step3. write result to excel #####
-            self.oneday_dir.write_result_to_excel()
+        ##### Step3. write result to excel #####
+        self.oneday_dir.write_result_to_excel()
 
 
-            ##### Step4. print result to UI #####
-            # record interrupt times, wrong judge times, accuracy
-            # self.wrongJudgeTimes = 0        # 目前沒這個資訊
-            # self.accuracy = 0               # 有了total_interrupt_count跟wrongJudgeTimes就可算accuracy
-            # self.ui.label_interrupt_times.setText("Interrupt Times:   " + str(self.video_file.total_revised_interrupt_count))
+        ##### Step4. 評估performance #####
+        self.oneday_dir.oneday_performance = judge.performance(oneday_dir=self.oneday_dir)
 
-            self.movie = QtGui.QMovie("image/giphy.gif")
-            self.ui.label_done.setMovie(self.movie)
-            self.movie.start()
 
-            self.ui.button_start_judge.setDisabled(True)
-            self.ui.button_check_result.setDisabled(False)
+        ##### Step5. 結束Judge後的提示 #####
+        self.movie = QtGui.QMovie("image/giphy.gif")
+        self.ui.label_done.setMovie(self.movie)
+        self.movie.start()
 
-            # song = AudioSegment.from_mp3("sound/done.mp3")
-            # play(song)
+        song = AudioSegment.from_mp3("sound/done.mp3")
+        play(song)
+
+        self.ui.button_start_judge.setDisabled(True)
+        self.ui.button_check_result.setDisabled(False)
 
     def show_result(self):
+        ##### Step1. print result to UI #####
+        self.ui.label_interrupt_times.setText("總中斷次數:   " + str(self.oneday_dir.oneday_interrupt_count))
+        self.ui.label_performance.setText(self.oneday_dir.oneday_performance)
+        self.ui.label_performance_text.setText("表現評分:   ")
+        ##### Step2. show all interrupt #####
         self.ui.comboBox_choose_video.clear()
         for video_file in self.oneday_dir.video_file_list:
             self.ui.comboBox_choose_video.addItem(video_file.filename)
@@ -165,7 +167,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         ##### Step1. 取出選取到的interrupt 
         item_index = self.ui.list_widget_interrupt.currentRow()
 
-        videoinfo = opencv_engine.get_video_info(self.choose_video_file.filepath)
+        videoinfo = opencv_engine.get_video_info(self.choose_video_file.filepath) # 因為每一次要播放的地方不一樣，Judge時已把原本的vc release掉，所以每次show都重新get_video_info
         vc = videoinfo["vc"]
         fps = videoinfo["fps"]
         
@@ -203,48 +205,3 @@ class MainWindow_controller(QtWidgets.QMainWindow):
 
         # 刪除excel裡的row
         self.oneday_dir.delete_excel_row(self.choose_video_file, self.remove_item_index)
-
-
-    def performance(self):
-        dir_path = QtWidgets.QFileDialog.getExistingDirectory()
-        one_day_sheets = []
-        filename = []
-        each_interrupt_number = []
-        one_day_interrupt_number = 0
-        for i in range(len(filePath)):
-            basename = os.path.basename(filePath[i])
-            filename.append(os.path.splitext(basename)[0])
-            one_day_sheets.append(wb[filename[i]])
-            rows = one_day_sheets[i].max_row
-            each_interrupt_number.append(rows - 5)
-            one_day_interrupt_number += each_interrupt_number[i]
-        video_total_time = 7383
-        
-        score = one_day_interrupt_number/(video_total_time/60/9)
-        performance = '-'
-        if 0 <= score < 1:
-            performance = 'A+'
-        elif 1 <= score < 3:
-            performance = 'A'
-        elif 3 <= score < 4:
-            performance = 'A-'
-        elif 4 <= score < 5:
-            performance = 'B+'
-        elif 5 <= score < 7:
-            performance = 'B'
-        elif 7 <= score < 8:
-            performance = 'B-'
-        elif 8 <= score < 9:
-            performance = 'C+'
-        elif 9 <= score < 11:
-            performance = 'C'
-        elif 11 <= score < 12:
-            performance = 'C-'
-        elif 12 <= score:
-            performance = 'D'
-        self.ui.label_performance.setText(str(performance))
-            
-    
-    def import_result(self):
-        dir_path = QtWidgets.QFileDialog.getExistingDirectory()
-        dir_name = os.path.basename(dir_path)

@@ -5,14 +5,17 @@ from Utils import compute
 
 class Directory:
     def __init__(self, dirpath, dirname):
+        # 一開始就得初始化好的
         self.dirpath = dirpath
         self.dirname = dirname
-
         self.video_count = 0
-
-        self.oneday_interrupt_count = 0
+        self.oneday_total_time = 0
         self.video_file_list = []
+
+        # 經過judge後才能找到的
+        self.oneday_interrupt_count = 0
         self.oneday_interrupt_time = 0
+        self.oneday_performance = '-'
 
         self.wb = openpyxl.load_workbook('Result.xlsx')
         
@@ -64,21 +67,25 @@ class Directory:
         ##### 2. 印出手術總中斷次數 #####
         total_interrupt_number_name = str(self.oneday_interrupt_count)
 
-        data = ['總手術中斷次數', total_interrupt_number_name, '']
+        data = ['手術總中斷次數', total_interrupt_number_name, '']
         self.ws.append(data)
 
         ##### 3. 印出手術總中斷時長 #####
         total_normal_time = compute.get_normal_time_info(time_in_seconds=self.oneday_interrupt_time)
         total_time_name = compute.get_excel_str(normal_time=total_normal_time)
 
-        data = ['總手術中斷時間', total_time_name, '']
+        data = ['手術總中斷時間', total_time_name, '']
         self.ws.append(data)
 
         ##### 4. 印出手術總時長 #####
-        total_normal_time = compute.get_normal_time_info(time_in_seconds=self.oneday_interrupt_time)
+        total_normal_time = compute.get_normal_time_info(time_in_seconds=self.oneday_total_time)
         total_time_name = compute.get_excel_str(normal_time=total_normal_time)
 
-        data = ['總手術中斷時間', total_time_name, '']
+        data = ['手術總執行時間', total_time_name, '']
+        self.ws.append(data)
+
+        ##### 5. 印出performance #####
+        data = ['手術表現評分', self.oneday_performance, '']
         self.ws.append(data)
 
         self.wb.save(filename='Result.xlsx')
