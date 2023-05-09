@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>1500</width>
-    <height>850</height>
+    <height>864</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -38,7 +38,7 @@
      <rect>
       <x>60</x>
       <y>210</y>
-      <width>220</width>
+      <width>235</width>
       <height>60</height>
      </rect>
     </property>
@@ -75,7 +75,7 @@ QPushButton:disabled {
      <rect>
       <x>60</x>
       <y>130</y>
-      <width>220</width>
+      <width>235</width>
       <height>60</height>
      </rect>
     </property>
@@ -128,16 +128,16 @@ border-style:outset;</string>
    <widget class="QLabel" name="label_interrupt_times">
     <property name="geometry">
      <rect>
-      <x>680</x>
-      <y>70</y>
-      <width>380</width>
+      <x>700</x>
+      <y>290</y>
+      <width>260</width>
       <height>50</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>微軟正黑體</family>
-      <pointsize>16</pointsize>
+      <pointsize>12</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -177,7 +177,7 @@ border-style:outset;</string>
      <rect>
       <x>60</x>
       <y>300</y>
-      <width>220</width>
+      <width>235</width>
       <height>60</height>
      </rect>
     </property>
@@ -237,40 +237,11 @@ border-style:outset;</string>
      <string>刪除此中斷點 ❌</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="button_import_result">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>210</y>
-      <width>220</width>
-      <height>60</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>微軟正黑體</family>
-      <pointsize>16</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(190, 184, 171);
-border-radius: 20px;
-border: 1px groove gray;
-border-style:outset;
-</string>
-    </property>
-    <property name="text">
-     <string>引入</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_done">
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>10</y>
+      <y>30</y>
       <width>211</width>
       <height>131</height>
      </rect>
@@ -288,16 +259,16 @@ border-style:outset;
     </property>
     <property name="geometry">
      <rect>
-      <x>800</x>
-      <y>190</y>
-      <width>170</width>
-      <height>170</height>
+      <x>830</x>
+      <y>20</y>
+      <width>90</width>
+      <height>90</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>Arial Black</family>
-      <pointsize>72</pointsize>
+      <pointsize>48</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -309,7 +280,7 @@ border-style:outset;
      <string/>
     </property>
     <property name="alignment">
-     <set>Qt::AlignCenter</set>
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="label_performance_text">
@@ -318,8 +289,8 @@ border-style:outset;
     </property>
     <property name="geometry">
      <rect>
-      <x>680</x>
-      <y>140</y>
+      <x>660</x>
+      <y>40</y>
       <width>380</width>
       <height>50</height>
      </rect>
@@ -333,7 +304,7 @@ border-style:outset;
      </font>
     </property>
     <property name="text">
-     <string>表現評分:   尚未進行偵測</string>
+     <string>中斷次數評分:   尚未進行偵測</string>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -360,6 +331,375 @@ border-style:outset;
      </font>
     </property>
    </widget>
+   <widget class="QTabWidget" name="plot_tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>370</y>
+      <width>770</width>
+      <height>430</height>
+     </rect>
+    </property>
+    <property name="tabPosition">
+     <enum>QTabWidget::South</enum>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <property name="documentMode">
+     <bool>true</bool>
+    </property>
+    <property name="tabsClosable">
+     <bool>false</bool>
+    </property>
+    <property name="tabBarAutoHide">
+     <bool>false</bool>
+    </property>
+    <widget class="QWidget" name="tab1">
+     <attribute name="title">
+      <string>總手術時間</string>
+     </attribute>
+     <widget class="QLabel" name="plot_label1">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>10</y>
+        <width>500</width>
+        <height>380</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>微軟正黑體</family>
+        <pointsize>22</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>尚未引入數據!</string>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab2">
+     <attribute name="title">
+      <string>總中斷時間</string>
+     </attribute>
+     <widget class="QLabel" name="plot_label2">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>10</y>
+        <width>500</width>
+        <height>380</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>微軟正黑體</family>
+        <pointsize>22</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>尚未引入數據!</string>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab3">
+     <attribute name="title">
+      <string>總中斷次數</string>
+     </attribute>
+     <widget class="QLabel" name="plot_label3">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>10</y>
+        <width>500</width>
+        <height>380</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>微軟正黑體</family>
+        <pointsize>22</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>尚未引入數據!</string>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab4">
+     <attribute name="title">
+      <string>中斷時間/總手術時間比例 </string>
+     </attribute>
+     <widget class="QLabel" name="plot_label4">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>10</y>
+        <width>500</width>
+        <height>380</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>微軟正黑體</family>
+        <pointsize>22</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>尚未引入數據!</string>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="button_plot_result">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>300</y>
+      <width>235</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微軟正黑體</family>
+      <pointsize>16</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(190, 184, 171);
+border-radius: 20px;
+border: 1px groove gray;
+border-style:outset;
+</string>
+    </property>
+    <property name="text">
+     <string>顯示近五次結果圖 📊</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_efficeiency_text">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>120</y>
+      <width>380</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微軟正黑體</family>
+      <pointsize>16</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>效率評分:   尚未進行偵測</string>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_surgery_time">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>190</y>
+      <width>260</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微軟正黑體</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>總手術時間:   尚未進行偵測</string>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_total_interrupt_time">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>240</y>
+      <width>260</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微軟正黑體</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>總中斷時間:   尚未進行偵測</string>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_efficiency">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>830</x>
+      <y>100</y>
+      <width>90</width>
+      <height>90</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial Black</family>
+      <pointsize>48</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 0, 0);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_ratio">
+    <property name="geometry">
+     <rect>
+      <x>1000</x>
+      <y>190</y>
+      <width>260</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微軟正黑體</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>中斷時間佔比:   尚未進行偵測</string>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_unit_interrupt_counts">
+    <property name="geometry">
+     <rect>
+      <x>1000</x>
+      <y>240</y>
+      <width>260</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微軟正黑體</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>單位時間中斷次數:   尚未進行偵測</string>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <zorder>button_start_judge</zorder>
+   <zorder>button_choose_video</zorder>
+   <zorder>label_video_name</zorder>
+   <zorder>label_interrupt_times</zorder>
+   <zorder>list_widget_interrupt</zorder>
+   <zorder>button_check_result</zorder>
+   <zorder>button_remove_interrupt</zorder>
+   <zorder>label_done</zorder>
+   <zorder>comboBox_choose_video</zorder>
+   <zorder>plot_tabWidget</zorder>
+   <zorder>button_plot_result</zorder>
+   <zorder>label_efficeiency_text</zorder>
+   <zorder>label_surgery_time</zorder>
+   <zorder>label_total_interrupt_time</zorder>
+   <zorder>label_ratio</zorder>
+   <zorder>label_unit_interrupt_counts</zorder>
+   <zorder>label_performance_text</zorder>
+   <zorder>label_performance</zorder>
+   <zorder>label_efficiency</zorder>
   </widget>
  </widget>
  <resources/>

@@ -1,6 +1,7 @@
 import cv2 as cv
 import os
 import re
+from PyQt5.QtGui import QImage, QPixmap
 
 class opencv_engine(object):
 
@@ -59,7 +60,7 @@ class judge(object):
     def start_judge(file):
         cap = file.videoinfo["vc"]
         fps = file.videoinfo["fps"]
-
+        finish_judge = True
         ## parameter setting ##
         limit = 20      # count_frame的上限 = fake_count的上限 = 20
 
@@ -170,10 +171,13 @@ class judge(object):
 
             frame_no += 1
             if cv.waitKey(1) == ord('q'):      # 每一毫秒更新一次，直到按下 q 結束
+                finish_judge = False # 若手動關掉則刪除此次紀錄
                 break
         
         cap.release()
         cv.destroyAllWindows()                  # 結束所有視窗
+
+        return finish_judge
 
         
     def revise_interrupt(file):
@@ -259,3 +263,28 @@ class judge(object):
             performance = 'D'
 
         return performance
+    
+    def performance_eff(oneday_dir):
+
+        score = round(oneday_dir.oneday_interrupt_time / oneday_dir.oneday_total_time, 3) * 100
+        performance = '-'
+        if 0 <= score < 6:
+            performance = 'A'
+        elif 6 <= score < 12:
+            performance = 'B'
+        elif 12 <= score < 18:
+            performance = 'C'
+        elif 18 <= score:
+            performance = 'D'
+
+        return performance
+    
+class image(object):
+    def show_image_on_label(filepath):
+        img1 = cv.imread(filepath)
+        height, width, channel = img1.shape
+
+        bytes_perline = 3 * width
+        qimage = QImage(img1, width, height, bytes_perline, QImage.Format_RGB888).rgbSwapped()
+
+        return QPixmap.fromImage(qimage)

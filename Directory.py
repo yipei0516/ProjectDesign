@@ -16,9 +16,9 @@ class Directory:
         self.oneday_interrupt_count = 0
         self.oneday_interrupt_time = 0
         self.oneday_performance = '-'
+        self.oneday_efficiency = '-'
 
         self.wb = openpyxl.load_workbook('Result.xlsx')
-        
 
     
     def write_result_to_excel(self): ## write result to excel ##
@@ -71,10 +71,10 @@ class Directory:
         self.ws.append(data)
 
         ##### 3. 印出手術總中斷時長 #####
-        total_normal_time = compute.get_normal_time_info(time_in_seconds=self.oneday_interrupt_time)
-        total_time_name = compute.get_excel_str(normal_time=total_normal_time)
+        total_interrupt_normal_time = compute.get_normal_time_info(time_in_seconds=self.oneday_interrupt_time)
+        total_interrupt_time_name = compute.get_excel_str(normal_time=total_interrupt_normal_time)
 
-        data = ['手術總中斷時間', total_time_name, '']
+        data = ['手術總中斷時間', total_interrupt_time_name, '']
         self.ws.append(data)
 
         ##### 4. 印出手術總時長 #####
@@ -85,29 +85,70 @@ class Directory:
         self.ws.append(data)
 
         ##### 5. 印出performance #####
-        data = ['手術表現評分', self.oneday_performance, '']
+        data = ['手術中斷次數評分', self.oneday_performance, '']
         self.ws.append(data)
 
+        ##### 6. 印出efficiency #####
+        data = ['手術效率評分', self.oneday_efficiency, '']
+        self.ws.append(data)
+
+
+        ##### 6. 將這天的手術資訊印到Excel的總表 #####
+        target_sheetName = '目前測過的手術日期總資訊'
+        exist_flag = False
+        for i in range(len(self.wb.sheetnames)):
+            if(self.wb.sheetnames[i] == target_sheetName):
+                exist_flag = True
+                break
+        
+        if(exist_flag == False):        # sheet不存在就建一個
+            self.wb.create_sheet("目前測過的手術日期總資訊", 0)
+            ws1 = self.wb.worksheets[0]
+            data = ['手術日期', '總手術時間', '總中斷時間', '總中斷次數', '中斷時間/總手術時間的比例 (%)', '手術表現評分']
+            ws1.append(data)
+        else:
+            ws1 = self.wb.worksheets[0]
+
+        total_surgeryTime = round(self.oneday_total_time/60, 1)         #分鐘數
+        total_interruptTime = round(self.oneday_interrupt_time/60, 1)   #分鐘數
+        ratio_of_intereuptTime = round(self.oneday_interrupt_time / self.oneday_total_time, 3) * 100
+        data = [self.dirname, total_surgeryTime, total_interruptTime, self.oneday_interrupt_count, ratio_of_intereuptTime, self.oneday_performance]
+        
+        ws1.insert_rows(2)
+        ws1._current_row = 1
+        ws1.append(data)
+
+
+        ##### 7. 存檔 #####
         self.wb.save(filename='Result.xlsx')
 
 
     def delete_excel_row(self, choose_video_file, remove_interrupt_index):
+        self.ws = self.wb[self.dirname]
+        remove_ws = self.wb['remove']
         video_file_name = self.ws['A']
+        print(self.ws['1'])
 
+        # 直接刪除excel檔案裡的中斷
         row_num = 0
         for name in video_file_name:
             row_num += 1
             if name.value == choose_video_file.filename:
-                self.ws.delete_rows(row_num + remove_interrupt_index + 1) #excel第一列為1(非index)
+                remove_row = row_num + remove_interrupt_index + 1
+                data = [choose_video_file.filename, '', '']
+                remove_ws.append(data)
+                row_with_values = [cell.value for cell in self.ws[str(remove_row)]]
+                remove_ws.append(row_with_values)
+                self.ws.delete_rows(remove_row) #excel第一列為1(非index)
                 break
 
-        
+        # 對變數進行更改
         self.oneday_interrupt_count -= 1
         self.oneday_interrupt_time -= (choose_video_file.revised_interrupt_list[remove_interrupt_index]["end_time"] - choose_video_file.revised_interrupt_list[remove_interrupt_index]["start_time"])
         total_normal_time = compute.get_normal_time_info(time_in_seconds=self.oneday_interrupt_time)
         total_time_name = compute.get_excel_str(normal_time=total_normal_time)
-        row = self.oneday_interrupt_count + 3 + 1 # 3行不重要的資訊
         self.ws['B'+str(self.ws.max_row-1)].value = self.oneday_interrupt_count
         self.ws['B'+str(self.ws.max_row)].value = total_time_name
+
         self.wb.save(filename='Result.xlsx')
         
