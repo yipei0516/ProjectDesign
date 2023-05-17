@@ -36,7 +36,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>130</x>
       <y>210</y>
       <width>235</width>
       <height>60</height>
@@ -73,7 +73,7 @@ QPushButton:disabled {
    <widget class="QPushButton" name="button_choose_video">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>130</x>
       <y>130</y>
       <width>235</width>
       <height>60</height>
@@ -167,46 +167,6 @@ border-style:outset;</string>
       <weight>75</weight>
       <bold>true</bold>
      </font>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="button_check_result">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>300</y>
-      <width>235</width>
-      <height>60</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>微軟正黑體</family>
-      <pointsize>16</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton {
-	color: rgb(255, 255, 255);
-	background-color: rgb(190, 184, 171);
-	border-radius: 20px;
-	border: 1px groove gray;
-	border-style:outset;
-}
-QPushButton:disabled {
-	color:#fff;
-	background:#ccc;
-	border-radius: 20px;
-	border: 1px solid gray;
-	border-style:outset;
-}</string>
-    </property>
-    <property name="text">
-     <string>✅確認結果✅</string>
     </property>
    </widget>
    <widget class="QPushButton" name="button_remove_interrupt">
@@ -340,11 +300,17 @@ border-style:outset;</string>
       <height>430</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">border-top:1px solid;
+border-left:1px solid;
+border-right:1px solid;
+border-bottom:1px  solid;</string>
+    </property>
     <property name="tabPosition">
      <enum>QTabWidget::South</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <property name="documentMode">
      <bool>true</bool>
@@ -375,6 +341,12 @@ border-style:outset;</string>
         <weight>75</weight>
         <bold>true</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-top:1px ;
+border-left:1px ;
+border-right:1px ;
+border-bottom:1px ;</string>
       </property>
       <property name="text">
        <string>尚未引入數據!</string>
@@ -408,6 +380,12 @@ border-style:outset;</string>
         <bold>true</bold>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true">border-top:1px ;
+border-left:1px ;
+border-right:1px ;
+border-bottom:1px ;</string>
+      </property>
       <property name="text">
        <string>尚未引入數據!</string>
       </property>
@@ -439,6 +417,12 @@ border-style:outset;</string>
         <weight>75</weight>
         <bold>true</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-top:1px ;
+border-left:1px ;
+border-right:1px ;
+border-bottom:1px ;</string>
       </property>
       <property name="text">
        <string>尚未引入數據!</string>
@@ -472,6 +456,12 @@ border-style:outset;</string>
         <bold>true</bold>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true">border-top:1px ;
+border-left:1px ;
+border-right:1px ;
+border-bottom:1px ;</string>
+      </property>
       <property name="text">
        <string>尚未引入數據!</string>
       </property>
@@ -487,7 +477,7 @@ border-style:outset;</string>
    <widget class="QPushButton" name="button_plot_result">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>130</x>
       <y>300</y>
       <width>235</width>
       <height>60</height>
@@ -686,7 +676,6 @@ border-style:outset;
    <zorder>label_video_name</zorder>
    <zorder>label_interrupt_times</zorder>
    <zorder>list_widget_interrupt</zorder>
-   <zorder>button_check_result</zorder>
    <zorder>button_remove_interrupt</zorder>
    <zorder>label_done</zorder>
    <zorder>comboBox_choose_video</zorder>

@@ -148,7 +148,6 @@ class Directory:
         self.ws = self.wb[self.dirname]
         remove_ws = self.wb['remove']
         video_file_name = self.ws['A']
-        print(self.ws['1'])
 
         # 直接刪除excel檔案裡的中斷
         row_num = 0
@@ -170,15 +169,18 @@ class Directory:
         self.oneday_unit_interrupt_counts = round(self.oneday_interrupt_count/(self.oneday_total_time/60/9), 2)
         self.oneday_performance = judge.performance(oneday_dir=self)
         self.oneday_efficiency = judge.performance_eff(oneday_dir=self)
+
         total_normal_time = compute.get_normal_time_info(time_in_seconds=self.oneday_interrupt_time)
         total_time_name = compute.get_excel_str(normal_time=total_normal_time)
         ratio_name = str(self.oneday_ratio)
         oneday_unit_interrupt_counts = str(self.oneday_unit_interrupt_counts)
-        self.ws['B'+str(self.ws.max_row - 5)].value = self.oneday_interrupt_count
-        self.ws['B'+str(self.ws.max_row - 4)].value = total_time_name
+
+        self.ws['B'+str(self.ws.max_row - 5)].value = total_time_name
+        self.ws['B'+str(self.ws.max_row - 4)].value = self.oneday_interrupt_count
         self.ws['B'+str(self.ws.max_row - 3)].value = ratio_name
         self.ws['B'+str(self.ws.max_row - 2)].value = oneday_unit_interrupt_counts
-
+        self.ws['B'+str(self.ws.max_row - 1)].value = self.oneday_performance
+        self.ws['B'+str(self.ws.max_row)].value = self.oneday_efficiency
 
 
         self.wb.save(filename='Result.xlsx')

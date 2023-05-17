@@ -17,14 +17,13 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.setup_control()
         self.ui.button_start_judge.setDisabled(True)
-        self.ui.button_check_result.setDisabled(True)
+        self.ui.button_remove_interrupt.setDisabled(True)
 
     ### 將每個button連上對應的event
     def setup_control(self):
         # TODO
         self.ui.button_choose_video.clicked.connect(self.clicked_choose_video)
         self.ui.button_start_judge.clicked.connect(self.clicked_start_judge)
-        # self.ui.button_check_result.clicked.connect(self.show_result)
         self.ui.list_widget_interrupt.itemDoubleClicked.connect(self.show_interrupt_clip) # 雙擊interrupt時，跳出此段畫面
         self.ui.list_widget_interrupt.itemClicked.connect(self.choose_remove_interrupt) # 單擊interrupt時，選取起來準備刪除
         self.ui.button_remove_interrupt.clicked.connect(self.remove_interrupt)
@@ -41,7 +40,22 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         dir_name = os.path.basename(dir_path)
         self.oneday_dir = Directory(dirpath=dir_path, dirname=dir_name)
 
-        ##### Step2. 確認是否直接關掉選取畫面 #####
+
+        ##### Step2. 為了可能重複偵測->全部reset #####
+        self.ui.label_video_name.setText("資料夾名稱:   " + dir_name)
+        self.ui.label_done.setVisible(False)
+        self.ui.label_performance.setText("")
+        self.ui.label_performance_text.setText("中斷次數評分:   尚未進行偵測")
+        self.ui.label_efficiency.setText("")
+        self.ui.label_efficeiency_text.setText("效率評分:   尚未進行偵測")
+
+        self.ui.label_surgery_time.setText("總手術時間:   尚未進行偵測")
+        self.ui.label_total_interrupt_time.setText("總中斷時間:   尚未進行偵測")
+        self.ui.label_interrupt_times.setText("總中斷次數:   尚未進行偵測")
+        self.ui.label_ratio.setText("中斷時間佔整個手術時間的比例:   尚未進行偵測")
+        self.ui.label_unit_interrupt_counts.setText("平均每九分鐘的中斷次數:   尚未進行偵測")
+
+        ##### Step3. 確認是否直接關掉選取畫面 #####
         # 直接關掉選擇資料夾畫面 #
         if dir_path == '':
             pass
@@ -83,12 +97,12 @@ class MainWindow_controller(QtWidgets.QMainWindow):
                     mbox.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No) # 添加三顆按鈕
                     mbox.setDefaultButton(QtWidgets.QMessageBox.No) # 設定預設按鈕
                     ret = mbox.exec()
+
                     if ret == QtWidgets.QMessageBox.Yes:
                         # 刪除前一個judge的結果
                         self.oneday_dir.wb.remove_sheet(repeated_sheet)
                         self.oneday_dir.wb.save('Result.xlsx')
                         self.ui.button_start_judge.setDisabled(False)
-                        self.ui.button_check_result.setDisabled(True)
                     elif ret == QtWidgets.QMessageBox.No:
                         # 跳出上次的結果
                         self.oneday_dir.oneday_interrupt_time = compute.normal_time_to_seconds(repeated_sheet['B'+str(repeated_sheet.max_row-5)].value)
@@ -115,26 +129,11 @@ class MainWindow_controller(QtWidgets.QMainWindow):
                                 video_file.revised_interrupt_list.append(interrupt_info)
                                 video_file.total_revised_interrupt_count += 1
                         self.ui.button_start_judge.setDisabled(True)
-                        self.ui.button_check_result.setDisabled(False)
+
+                        self.show_result()
                 # 工作表內未含有此天的手術偵測紀錄 #
                 else:
                     self.ui.button_start_judge.setDisabled(False)
-                    self.ui.button_check_result.setDisabled(True)
-
-                # 為了可能重複偵測->全部reset
-                self.ui.label_video_name.setText("資料夾名稱:   " + dir_name)
-                self.ui.label_done.setVisible(False)
-                self.ui.label_performance.setText("")
-                self.ui.label_performance_text.setText("中斷次數評分:   尚未進行偵測")
-                self.ui.label_efficiency.setText("")
-                self.ui.label_efficeiency_text.setText("效率評分:   尚未進行偵測")
-
-                self.ui.label_surgery_time.setText("總手術時間:   尚未進行偵測")
-                self.ui.label_total_interrupt_time.setText("總中斷時間:   尚未進行偵測")
-                self.ui.label_interrupt_times.setText("總中斷次數:   尚未進行偵測")
-                self.ui.label_ratio.setText("中斷時間佔整個手術時間的比例:   尚未進行偵測")
-                self.ui.label_unit_interrupt_counts.setText("平均每九分鐘的中斷次數:   尚未進行偵測")
-                
 
     
     ### Start Judge
@@ -164,7 +163,6 @@ class MainWindow_controller(QtWidgets.QMainWindow):
             playsound('./sound/done.mp3')
             # 按鈕 #
             self.ui.button_start_judge.setDisabled(True)
-            self.ui.button_check_result.setDisabled(False)
 
             ##### Step5. 直接顯示結果 #####
             self.show_result()
@@ -206,7 +204,6 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         for i in range(self.choose_video_file.total_revised_interrupt_count):
             start_normal_time = compute.get_normal_time_info(time_in_seconds=self.choose_video_file.revised_interrupt_list[i]["start_time"])
             start_time_name = compute.get_excel_str(normal_time=start_normal_time)
-
             end_normal_time = compute.get_normal_time_info(time_in_seconds=self.choose_video_file.revised_interrupt_list[i]["end_time"])
             end_time_name = compute.get_excel_str(normal_time=end_normal_time)
 
@@ -215,19 +212,15 @@ class MainWindow_controller(QtWidgets.QMainWindow):
     def show_interrupt_clip(self):
         ##### Step1. 取出選取到的interrupt 
         item_index = self.ui.list_widget_interrupt.currentRow()
-
         videoinfo = opencv_engine.get_video_info(self.choose_video_file.filepath) # 因為每一次要播放的地方不一樣，Judge時已把原本的vc release掉，所以每次show都重新get_video_info
         vc = videoinfo["vc"]
         fps = videoinfo["fps"]
-        
         start_choose_frame = compute.seconds_to_frame_num(time_in_seconds=self.choose_video_file.revised_interrupt_list[item_index]['start_time'], fps=fps) 
         end_choose_frame = compute.seconds_to_frame_num(time_in_seconds=self.choose_video_file.revised_interrupt_list[item_index]['end_time'], fps=fps)
 
         ##### Step2. 播映interrupt開始的地方
         frame_diff = end_choose_frame - start_choose_frame
         count_frame = 0
-
-        
         vc.set(cv.CAP_PROP_POS_FRAMES, start_choose_frame - fps*1) #往前1秒開始播放
         while True:
             count_frame += 1
@@ -245,6 +238,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
 
     def choose_remove_interrupt(self):
         self.remove_item_index = self.ui.list_widget_interrupt.currentRow()
+        self.ui.button_remove_interrupt.setDisabled(False)
 
 
     def remove_interrupt(self):
@@ -254,7 +248,6 @@ class MainWindow_controller(QtWidgets.QMainWindow):
 
         # 刪除excel裡的row
         self.oneday_dir.delete_excel_row(self.choose_video_file, self.remove_item_index)
-        print(self.remove_item_index)
 
         # 更改目前UI的顯示!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         self.ui.label_total_interrupt_time.setText("總中斷時間:   " + str(round(self.oneday_dir.oneday_interrupt_time/60, 1))  + " 分鐘")
@@ -265,6 +258,8 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.ui.label_performance_text.setText("中斷次數評分:   ")
         self.ui.label_efficiency.setText(self.oneday_dir.oneday_efficiency)
         self.ui.label_efficeiency_text.setText("效率評分:   ")
+
+        self.ui.button_remove_interrupt.setDisabled(True)
         
 
 

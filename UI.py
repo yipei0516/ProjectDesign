@@ -30,7 +30,7 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.button_start_judge = QtWidgets.QPushButton(self.centralwidget)
         self.button_start_judge.setEnabled(True)
-        self.button_start_judge.setGeometry(QtCore.QRect(60, 210, 235, 60))
+        self.button_start_judge.setGeometry(QtCore.QRect(130, 210, 235, 60))
         font = QtGui.QFont()
         font.setFamily("微軟正黑體")
         font.setPointSize(16)
@@ -53,7 +53,7 @@ class Ui_MainWindow(object):
 "}")
         self.button_start_judge.setObjectName("button_start_judge")
         self.button_choose_video = QtWidgets.QPushButton(self.centralwidget)
-        self.button_choose_video.setGeometry(QtCore.QRect(60, 130, 235, 60))
+        self.button_choose_video.setGeometry(QtCore.QRect(130, 130, 235, 60))
         font = QtGui.QFont()
         font.setFamily("微軟正黑體")
         font.setPointSize(16)
@@ -96,30 +96,6 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.list_widget_interrupt.setFont(font)
         self.list_widget_interrupt.setObjectName("list_widget_interrupt")
-        self.button_check_result = QtWidgets.QPushButton(self.centralwidget)
-        self.button_check_result.setEnabled(True)
-        self.button_check_result.setGeometry(QtCore.QRect(60, 300, 235, 60))
-        font = QtGui.QFont()
-        font.setFamily("微軟正黑體")
-        font.setPointSize(16)
-        font.setBold(True)
-        font.setWeight(75)
-        self.button_check_result.setFont(font)
-        self.button_check_result.setStyleSheet("QPushButton {\n"
-"    color: rgb(255, 255, 255);\n"
-"    background-color: rgb(190, 184, 171);\n"
-"    border-radius: 20px;\n"
-"    border: 1px groove gray;\n"
-"    border-style:outset;\n"
-"}\n"
-"QPushButton:disabled {\n"
-"    color:#fff;\n"
-"    background:#ccc;\n"
-"    border-radius: 20px;\n"
-"    border: 1px solid gray;\n"
-"    border-style:outset;\n"
-"}")
-        self.button_check_result.setObjectName("button_check_result")
         self.button_remove_interrupt = QtWidgets.QPushButton(self.centralwidget)
         self.button_remove_interrupt.setGeometry(QtCore.QRect(410, 770, 170, 35))
         font = QtGui.QFont()
@@ -175,6 +151,10 @@ class Ui_MainWindow(object):
         self.comboBox_choose_video.setObjectName("comboBox_choose_video")
         self.plot_tabWidget = QtWidgets.QTabWidget(self.centralwidget)
         self.plot_tabWidget.setGeometry(QtCore.QRect(650, 370, 770, 430))
+        self.plot_tabWidget.setStyleSheet("border-top:1px solid;\n"
+"border-left:1px solid;\n"
+"border-right:1px solid;\n"
+"border-bottom:1px  solid;")
         self.plot_tabWidget.setTabPosition(QtWidgets.QTabWidget.South)
         self.plot_tabWidget.setDocumentMode(True)
         self.plot_tabWidget.setTabsClosable(False)
@@ -190,6 +170,10 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.plot_label1.setFont(font)
+        self.plot_label1.setStyleSheet("border-top:1px ;\n"
+"border-left:1px ;\n"
+"border-right:1px ;\n"
+"border-bottom:1px ;")
         self.plot_label1.setScaledContents(True)
         self.plot_label1.setAlignment(QtCore.Qt.AlignCenter)
         self.plot_label1.setObjectName("plot_label1")
@@ -204,6 +188,10 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.plot_label2.setFont(font)
+        self.plot_label2.setStyleSheet("border-top:1px ;\n"
+"border-left:1px ;\n"
+"border-right:1px ;\n"
+"border-bottom:1px ;")
         self.plot_label2.setScaledContents(True)
         self.plot_label2.setAlignment(QtCore.Qt.AlignCenter)
         self.plot_label2.setObjectName("plot_label2")
@@ -218,6 +206,10 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.plot_label3.setFont(font)
+        self.plot_label3.setStyleSheet("border-top:1px ;\n"
+"border-left:1px ;\n"
+"border-right:1px ;\n"
+"border-bottom:1px ;")
         self.plot_label3.setScaledContents(True)
         self.plot_label3.setAlignment(QtCore.Qt.AlignCenter)
         self.plot_label3.setObjectName("plot_label3")
@@ -232,12 +224,16 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.plot_label4.setFont(font)
+        self.plot_label4.setStyleSheet("border-top:1px ;\n"
+"border-left:1px ;\n"
+"border-right:1px ;\n"
+"border-bottom:1px ;")
         self.plot_label4.setScaledContents(True)
         self.plot_label4.setAlignment(QtCore.Qt.AlignCenter)
         self.plot_label4.setObjectName("plot_label4")
         self.plot_tabWidget.addTab(self.tab4, "")
         self.button_plot_result = QtWidgets.QPushButton(self.centralwidget)
-        self.button_plot_result.setGeometry(QtCore.QRect(340, 300, 235, 60))
+        self.button_plot_result.setGeometry(QtCore.QRect(130, 300, 235, 60))
         font = QtGui.QFont()
         font.setFamily("微軟正黑體")
         font.setPointSize(16)
@@ -325,7 +321,6 @@ class Ui_MainWindow(object):
         self.label_video_name.raise_()
         self.label_interrupt_times.raise_()
         self.list_widget_interrupt.raise_()
-        self.button_check_result.raise_()
         self.button_remove_interrupt.raise_()
         self.label_done.raise_()
         self.comboBox_choose_video.raise_()
@@ -342,7 +337,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.plot_tabWidget.setCurrentIndex(0)
+        self.plot_tabWidget.setCurrentIndex(3)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -352,7 +347,6 @@ class Ui_MainWindow(object):
         self.button_choose_video.setText(_translate("MainWindow", "👆🏻 選擇資料夾 👆🏻"))
         self.label_video_name.setText(_translate("MainWindow", "資料夾名稱:   尚未選擇資料夾"))
         self.label_interrupt_times.setText(_translate("MainWindow", "總中斷次數:   尚未進行偵測"))
-        self.button_check_result.setText(_translate("MainWindow", "✅確認結果✅"))
         self.button_remove_interrupt.setText(_translate("MainWindow", "刪除此中斷點 ❌"))
         self.label_performance_text.setText(_translate("MainWindow", "中斷次數評分:   尚未進行偵測"))
         self.plot_label1.setText(_translate("MainWindow", "尚未引入數據!"))
