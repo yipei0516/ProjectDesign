@@ -234,6 +234,14 @@ class judge(object):
                     interrupt_info = file.interrupt_list[p2]
                     file.revised_interrupt_list.append(interrupt_info)
 
+    def get_score(oneday_dir):
+        oneday_interrupt_count = oneday_dir.oneday_interrupt_count
+        oneday_total_time = oneday_dir.oneday_total_time
+
+        score = round(oneday_interrupt_count/(oneday_total_time/60/9), 2)
+        print("SCORE = " + str(score))
+        return score
+
 
     def performance(oneday_dir):
         oneday_interrupt_count = oneday_dir.oneday_interrupt_count

@@ -260,7 +260,7 @@ border-style:outset;</string>
     <property name="geometry">
      <rect>
       <x>830</x>
-      <y>20</y>
+      <y>15</y>
       <width>90</width>
       <height>90</height>
      </rect>
@@ -632,7 +632,7 @@ border-style:outset;
      <rect>
       <x>1000</x>
       <y>190</y>
-      <width>260</width>
+      <width>371</width>
       <height>50</height>
      </rect>
     </property>
@@ -645,7 +645,7 @@ border-style:outset;
      </font>
     </property>
     <property name="text">
-     <string>中斷時間佔比:   尚未進行偵測</string>
+     <string>中斷時間佔整個手術時間的比例:   尚未進行偵測</string>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -659,7 +659,7 @@ border-style:outset;
      <rect>
       <x>1000</x>
       <y>240</y>
-      <width>260</width>
+      <width>371</width>
       <height>50</height>
      </rect>
     </property>
@@ -672,7 +672,7 @@ border-style:outset;
      </font>
     </property>
     <property name="text">
-     <string>單位時間中斷次數:   尚未進行偵測</string>
+     <string>平均每九分鐘的中斷次數:   尚未進行偵測</string>
     </property>
     <property name="scaledContents">
      <bool>true</bool>

@@ -24,7 +24,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         # TODO
         self.ui.button_choose_video.clicked.connect(self.clicked_choose_video)
         self.ui.button_start_judge.clicked.connect(self.clicked_start_judge)
-        self.ui.button_check_result.clicked.connect(self.show_result)
+        # self.ui.button_check_result.clicked.connect(self.show_result)
         self.ui.list_widget_interrupt.itemDoubleClicked.connect(self.show_interrupt_clip) # 雙擊interrupt時，跳出此段畫面
         self.ui.list_widget_interrupt.itemClicked.connect(self.choose_remove_interrupt) # 單擊interrupt時，選取起來準備刪除
         self.ui.button_remove_interrupt.clicked.connect(self.remove_interrupt)
@@ -91,16 +91,19 @@ class MainWindow_controller(QtWidgets.QMainWindow):
                         self.ui.button_check_result.setDisabled(True)
                     elif ret == QtWidgets.QMessageBox.No:
                         # 跳出上次的結果
+                        self.oneday_dir.oneday_interrupt_time = compute.normal_time_to_seconds(repeated_sheet['B'+str(repeated_sheet.max_row-5)].value)
                         self.oneday_dir.oneday_interrupt_count = int(repeated_sheet['B'+str(repeated_sheet.max_row-4)].value)
-                        self.oneday_dir.oneday_interrupt_time = compute.normal_time_to_seconds(repeated_sheet['B'+str(repeated_sheet.max_row-3)].value)
+                        self.oneday_dir.oneday_ratio = repeated_sheet['B'+str(repeated_sheet.max_row-3)].value
+                        self.oneday_dir.oneday_unit_interrupt_counts = repeated_sheet['B'+str(repeated_sheet.max_row-2)].value
                         self.oneday_dir.oneday_performance = repeated_sheet['B'+str(repeated_sheet.max_row-1)].value
                         self.oneday_dir.oneday_efficiency = repeated_sheet['B'+str(repeated_sheet.max_row)].value
+                        
                         A_col = repeated_sheet['A']
                         start_time = repeated_sheet['B']
                         end_time = repeated_sheet['C']
                         video_index = 0
                         for i in range(2, len(A_col)): # 跳過第一行
-                            if A_col[i].value == '手術總中斷次數':
+                            if A_col[i].value == '手術總執行時間':
                                 break
                             elif video_index < self.oneday_dir.video_count and A_col[i].value == oneday_video_name[video_index]:
                                 video_file = self.oneday_dir.video_file_list[video_index]
@@ -125,11 +128,12 @@ class MainWindow_controller(QtWidgets.QMainWindow):
                 self.ui.label_performance_text.setText("中斷次數評分:   尚未進行偵測")
                 self.ui.label_efficiency.setText("")
                 self.ui.label_efficeiency_text.setText("效率評分:   尚未進行偵測")
+
                 self.ui.label_surgery_time.setText("總手術時間:   尚未進行偵測")
                 self.ui.label_total_interrupt_time.setText("總中斷時間:   尚未進行偵測")
                 self.ui.label_interrupt_times.setText("總中斷次數:   尚未進行偵測")
-                self.ui.label_ratio.setText("中斷時間佔比:   尚未進行偵測")
-                self.ui.label_efficeiency_text.setText("單位時間中斷次數:   尚未進行偵測")
+                self.ui.label_ratio.setText("中斷時間佔整個手術時間的比例:   尚未進行偵測")
+                self.ui.label_unit_interrupt_counts.setText("平均每九分鐘的中斷次數:   尚未進行偵測")
                 
 
     
@@ -143,45 +147,54 @@ class MainWindow_controller(QtWidgets.QMainWindow):
                 break
             judge.revise_interrupt(file=video)
 
-
-            ##### Step2. write result to file #####
-            # video.write_result_to_file()
-
         if finish_judge == True: # 正確結束
-            ##### Step3. 評估performance #####
-            self.oneday_dir.oneday_performance = judge.performance(oneday_dir=self.oneday_dir)
-            self.oneday_dir.oneday_efficiency = judge.performance_eff(oneday_dir=self.oneday_dir)
 
+            ##### Step2. 計算一天的手術資訊 #####
+            self.oneday_dir.calculate_onedayInfo()            
 
-            ##### Step4. write result to excel #####
+            ##### Step3. write result to excel #####
             self.oneday_dir.write_result_to_excel()
 
 
-            ##### Step5. 結束Judge後的提示 #####
+            ##### Step4. 結束Judge後的提示 #####
+            # 相片 #
             qimage = image.show_image_on_label("./image/FINISH.jpg")
             self.ui.label_done.setPixmap(qimage)
+            # 聲音 #
             playsound('./sound/done.mp3')
-
+            # 按鈕 #
             self.ui.button_start_judge.setDisabled(True)
             self.ui.button_check_result.setDisabled(False)
+
+            ##### Step5. 直接顯示結果 #####
+            self.show_result()
         
         else: # 未正確結束
             mbox = QtWidgets.QMessageBox(self.ui.centralwidget)
             mbox.setIcon(QtWidgets.QMessageBox.Warning)
-            mbox.setText("資料夾 {0} 未正確結束，請重新選擇資料夾或者重新偵測此資料夾".format(self.oneday_dir.dirname))
+            mbox.setText("資料夾 {0} 未正確結束，請重新選擇資料夾".format(self.oneday_dir.dirname))
+            self.ui.button_start_judge.setDisabled(True)
             mbox.exec()
 
     def show_result(self):
         ##### Step1. print result to UI #####
-        self.ui.label_interrupt_times.setText("總中斷次數:   " + str(self.oneday_dir.oneday_interrupt_count))
+        ## 最上面的大數據
         self.ui.label_performance.setText(self.oneday_dir.oneday_performance)
         self.ui.label_performance_text.setText("中斷次數評分:   ")
         self.ui.label_efficiency.setText(self.oneday_dir.oneday_efficiency)
         self.ui.label_efficeiency_text.setText("效率評分:   ")
+        ## 次要的小數據
+        self.ui.label_surgery_time.setText("總手術時間:   " + str(round(self.oneday_dir.oneday_total_time/60, 1)) + " 分鐘")
+        self.ui.label_total_interrupt_time.setText("總中斷時間:   " + str(round(self.oneday_dir.oneday_interrupt_time/60, 1))  + " 分鐘")
+        self.ui.label_interrupt_times.setText("總中斷次數:   " + str(self.oneday_dir.oneday_interrupt_count))
+        self.ui.label_ratio.setText("中斷時間佔整個手術時間的比例:   " + str(self.oneday_dir.oneday_ratio) + " %")
+        self.ui.label_unit_interrupt_counts.setText("平均每九分鐘的中斷次數:   " + str(self.oneday_dir.oneday_unit_interrupt_counts) + " 次")
+
         ##### Step2. show all interrupt #####
         self.ui.comboBox_choose_video.clear()
         for video_file in self.oneday_dir.video_file_list:
             self.ui.comboBox_choose_video.addItem(video_file.filename)
+
 
     def change_list_widget(self):
         ##### Step1. check現在是哪一個video #####
@@ -241,10 +254,17 @@ class MainWindow_controller(QtWidgets.QMainWindow):
 
         # 刪除excel裡的row
         self.oneday_dir.delete_excel_row(self.choose_video_file, self.remove_item_index)
+        print(self.remove_item_index)
 
         # 更改目前UI的顯示!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        self.ui.label_total_interrupt_time.setText("總中斷時間:   " + str(self.oneday_dir.oneday_interrupt_time))
+        self.ui.label_total_interrupt_time.setText("總中斷時間:   " + str(round(self.oneday_dir.oneday_interrupt_time/60, 1))  + " 分鐘")
         self.ui.label_interrupt_times.setText("總中斷次數:   " + str(self.oneday_dir.oneday_interrupt_count))
+        self.ui.label_ratio.setText("中斷時間佔整個手術時間的比例:   " + str(self.oneday_dir.oneday_ratio) + " %")
+        self.ui.label_unit_interrupt_counts.setText("平均每九分鐘的中斷次數:   " + str(self.oneday_dir.oneday_unit_interrupt_counts) + " 次")
+        self.ui.label_performance.setText(self.oneday_dir.oneday_performance)
+        self.ui.label_performance_text.setText("中斷次數評分:   ")
+        self.ui.label_efficiency.setText(self.oneday_dir.oneday_efficiency)
+        self.ui.label_efficeiency_text.setText("效率評分:   ")
         
 
 
