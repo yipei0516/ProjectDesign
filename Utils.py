@@ -1,6 +1,7 @@
 import cv2 as cv
 import os
 import re
+from PIL import Image, ImageQt
 from PyQt5.QtGui import QImage, QPixmap
 
 class opencv_engine(object):
@@ -289,10 +290,8 @@ class judge(object):
     
 class image(object):
     def show_image_on_label(filepath):
-        img1 = cv.imread(filepath)
-        height, width, channel = img1.shape
-
-        bytes_perline = 3 * width
-        qimage = QImage(img1, width, height, bytes_perline, QImage.Format_RGB888).rgbSwapped()
-
-        return QPixmap.fromImage(qimage)
+        img = Image.open(filepath)
+        qimg = ImageQt.toqimage(img)
+        height, width = img.size
+        canvas = QPixmap(width,height).fromImage(qimg)
+        return canvas

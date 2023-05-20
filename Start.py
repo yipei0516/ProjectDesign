@@ -1,10 +1,10 @@
 from PyQt5 import QtWidgets
 
-from Controller import MainWindow_controller
+from MenuController import Menu_controller
 
 if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    window = MainWindow_controller()
+    window = Menu_controller()
     window.show()
     sys.exit(app.exec_())
