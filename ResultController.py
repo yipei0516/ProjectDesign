@@ -14,12 +14,9 @@ class Result_controller(QtWidgets.QMainWindow):
         self.oneday_dir = oneday_dir
         self.show_result()
         self.ui.button_remove_interrupt.setDisabled(True)
-        qimage = image.show_image_on_label("./image/ins.png")
-        self.ui.label_background.setPixmap(qimage)
-        self.ui.label_background.lower()
-        op = QtWidgets.QGraphicsOpacityEffect()
-        op.setOpacity(0.8)
-        self.ui.label_background.setGraphicsEffect(op)
+        qimage = image.show_image_on_label("./image/ins1.png")
+        self.ui.label_cute_image.setPixmap(qimage)
+        self.ui.label_cute_image.lower()
 
     ### 將每個button連上對應的event
     def setup_control(self):
@@ -103,8 +100,11 @@ class Result_controller(QtWidgets.QMainWindow):
         remove_item = self.ui.list_widget_interrupt.takeItem(self.remove_item_index)
         self.ui.list_widget_interrupt.removeItemWidget(remove_item)
 
-        # 刪除excel裡的row
+        # 刪除excel裡的row(大影片interrupt)
         self.oneday_dir.delete_excel_row(self.choose_video_file, self.remove_item_index)
+
+        # 刪除小影片interrupt
+        self.choose_video_file.delete_interrupt(self.remove_item_index)
 
         # 更改目前UI的顯示!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         self.ui.label_total_interrupt_time.setText("總中斷時間:   " + str(round(self.oneday_dir.oneday_interrupt_time/60, 1))  + " 分鐘")

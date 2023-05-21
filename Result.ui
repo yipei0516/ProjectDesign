@@ -51,7 +51,7 @@
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(255, 255, 255);</string>
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>總中斷次數:   尚未進行偵測</string>
@@ -159,7 +159,7 @@ border-style:outset;</string>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(255, 255, 255);</string>
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>中斷次數評分:   尚未進行偵測</string>
@@ -210,7 +210,7 @@ border-style:outset;</string>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(255, 255, 255);</string>
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>效率評分:   尚未進行偵測</string>
@@ -240,7 +240,7 @@ border-style:outset;</string>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(255, 255, 255);</string>
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>總手術時間:   尚未進行偵測</string>
@@ -270,7 +270,7 @@ border-style:outset;</string>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(255, 255, 255);</string>
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>總中斷時間:   尚未進行偵測</string>
@@ -330,7 +330,7 @@ border-style:outset;</string>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(255, 255, 255);</string>
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>中斷時間佔整個手術時間的比例:   尚未進行偵測</string>
@@ -360,7 +360,7 @@ border-style:outset;</string>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(255, 255, 255);</string>
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>平均每九分鐘的中斷次數:   尚未進行偵測</string>
@@ -415,11 +415,17 @@ border-style:outset;</string>
    <widget class="QLabel" name="label_background">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>130</x>
       <y>110</y>
-      <width>651</width>
-      <height>511</height>
+      <width>531</width>
+      <height>501</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-color: rgb(84, 84, 84);
+border-radius: 30px;
+border: 2px groove black;
+border-style:outset;</string>
     </property>
     <property name="text">
      <string/>
@@ -429,6 +435,22 @@ border-style:outset;</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_cute_image">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>149</y>
+      <width>150</width>
+      <height>150</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <zorder>label_background</zorder>
@@ -445,6 +467,7 @@ border-style:outset;</string>
    <zorder>label_performance</zorder>
    <zorder>label_efficiency</zorder>
    <zorder>button_back_menu</zorder>
+   <zorder>label_cute_image</zorder>
   </widget>
  </widget>
  <resources/>

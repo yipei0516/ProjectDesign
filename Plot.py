@@ -53,6 +53,7 @@ class Plot:
         ax.set_title('總手術時間')
         ax.bar_label(bar_container)
         
+        plt.xticks(rotation=10)
         plt.savefig('./result_image/Img1.png')
         plt.close()
 
@@ -81,6 +82,7 @@ class Plot:
         ax.set_title('總中斷時間')
         ax.bar_label(bar_container)
         
+        plt.xticks(rotation=10)
         plt.savefig('./result_image/Img2.png')
         plt.close()
 
@@ -104,6 +106,7 @@ class Plot:
         ax.set_title('總中斷次數')
         ax.bar_label(bar_container)
         
+        plt.xticks(rotation=10)
         plt.savefig('./result_image/Img3.png')
         plt.close()
 
@@ -128,6 +131,7 @@ class Plot:
         ax.set_title('中斷時間/總手術時間的比例 (%)')
         ax.bar_label(bar_container)
         
+        plt.xticks(rotation=10)
         plt.savefig('./result_image/Img4.png')
         plt.close()
 

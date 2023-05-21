@@ -29,3 +29,8 @@ class Video_File:
         #     "end_time"    : interrupt結束的time(in seconds)
         #     "label"       : interrupt label --> A類表簡單可分類；B類表待確認類
         # }  ### 見Utils.py judge
+
+
+    def delete_interrupt(self, remove_index):
+        self.total_revised_interrupt_count -= 1
+        del self.revised_interrupt_list[remove_index]
