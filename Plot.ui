@@ -20,9 +20,9 @@
    <property name="geometry">
     <rect>
      <x>79</x>
-     <y>9</y>
+     <y>29</y>
      <width>1031</width>
-     <height>671</height>
+     <height>651</height>
     </rect>
    </property>
    <property name="font">
@@ -44,7 +44,7 @@
     <enum>QTabWidget::South</enum>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>1</number>
    </property>
    <property name="documentMode">
     <bool>true</bool>
@@ -65,7 +65,7 @@
        <x>50</x>
        <y>10</y>
        <width>930</width>
-       <height>630</height>
+       <height>600</height>
       </rect>
      </property>
      <property name="font">
@@ -100,7 +100,7 @@
        <x>50</x>
        <y>10</y>
        <width>930</width>
-       <height>630</height>
+       <height>600</height>
       </rect>
      </property>
      <property name="font">
@@ -135,7 +135,7 @@
        <x>50</x>
        <y>10</y>
        <width>930</width>
-       <height>630</height>
+       <height>600</height>
       </rect>
      </property>
      <property name="font">
@@ -170,7 +170,7 @@
        <x>50</x>
        <y>10</y>
        <width>930</width>
-       <height>630</height>
+       <height>600</height>
       </rect>
      </property>
      <property name="font">
@@ -236,6 +236,25 @@
     </size>
    </property>
   </widget>
+  <widget class="QLabel" name="label_background">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1200</width>
+     <height>700</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <zorder>label_background</zorder>
+  <zorder>plot_tabWidget</zorder>
+  <zorder>button_back_menu</zorder>
  </widget>
  <resources/>
  <connections/>

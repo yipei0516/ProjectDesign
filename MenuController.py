@@ -18,12 +18,13 @@ class Menu_controller(QtWidgets.QWidget):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.setup_control()
+        self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
 
-        qimage = image.show_image_on_label("./image/surgery1.png")
+        qimage = image.show_image_on_label("./image/s2.png")
         self.ui.label_background.setPixmap(qimage)
         self.ui.label_background.lower()
         op = QtWidgets.QGraphicsOpacityEffect()
-        op.setOpacity(0.5)
+        op.setOpacity(0.65)
         self.ui.label_background.setGraphicsEffect(op)
 
         qimage = image.show_image_on_label("./image/shine.png")
@@ -92,19 +93,20 @@ class Menu_controller(QtWidgets.QWidget):
                 # 工作表內已含有此天的手術偵測紀錄 #
                 if dir_name in self.oneday_dir.wb.sheetnames: 
                     repeated_sheet = self.oneday_dir.wb[dir_name]
-                    mbox = QtWidgets.QMessageBox() # 跳出警告訊息
+                    mbox = QtWidgets.QMessageBox()
                     mbox.setIcon(QtWidgets.QMessageBox.Warning)
-                    mbox.setText("你已經測試過 {0} 的手術，是否要重新測試?".format(dir_name))
-                    mbox.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No) # 添加三顆按鈕
-                    mbox.setDefaultButton(QtWidgets.QMessageBox.No) # 設定預設按鈕
+                    mbox.setText("你已經測試過 {0} 的手術".format(dir_name))
+                    a = mbox.addButton('重新測試', 2)
+                    b = mbox.addButton('顯示上次測試結果', 2)
+                    mbox.setDefaultButton(b) # 設定預設按鈕
                     ret = mbox.exec()
 
-                    if ret == QtWidgets.QMessageBox.Yes:
+                    if ret == 0:
                         # 刪除前一個judge的結果
                         self.oneday_dir.wb.remove_sheet(repeated_sheet)
                         self.oneday_dir.wb.save('Result.xlsx')
                         self.ui.button_start_judge.setDisabled(False)
-                    elif ret == QtWidgets.QMessageBox.No:
+                    elif ret == 1:
                         # 跳出上次的結果
                         self.oneday_dir.oneday_interrupt_time = compute.normal_time_to_seconds(repeated_sheet['B'+str(repeated_sheet.max_row-5)].value)
                         self.oneday_dir.oneday_interrupt_count = int(repeated_sheet['B'+str(repeated_sheet.max_row-4)].value)
@@ -132,6 +134,7 @@ class Menu_controller(QtWidgets.QWidget):
                         self.ui.button_start_judge.setDisabled(True)
 
                         self.show_result()
+
                 # 工作表內未含有此天的手術偵測紀錄 #
                 else:
                     self.ui.button_start_judge.setDisabled(False)
@@ -164,7 +167,7 @@ class Menu_controller(QtWidgets.QWidget):
 
             ##### Step4. 結束Judge後的提示 #####
             # 聲音 #
-            playsound('./sound/done.mp3')
+            playsound('./sound/done2.mp3')
 
 
             ##### Step5. 直接顯示結果 #####

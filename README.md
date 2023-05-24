@@ -38,3 +38,6 @@
 - conda install openpyxl
 - pip install playsound
 - 根據此網址更改playsound檔案: https://blog.csdn.net/jasonwu93/article/details/121475106 
+
+# 注意
+- 最後注意UI上顯示圖片的路徑

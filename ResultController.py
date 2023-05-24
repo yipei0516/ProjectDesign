@@ -10,13 +10,23 @@ class Result_controller(QtWidgets.QMainWindow):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
         self.setup_control()
+
         self.oneday_dir = oneday_dir
         self.show_result()
         self.ui.button_remove_interrupt.setDisabled(True)
+
         qimage = image.show_image_on_label("./image/ins1.png")
         self.ui.label_cute_image.setPixmap(qimage)
         self.ui.label_cute_image.lower()
+
+        qimage = image.show_image_on_label("./image/background1.png")
+        self.ui.label_background.setPixmap(qimage)
+        self.ui.label_background.lower()
+        op = QtWidgets.QGraphicsOpacityEffect()
+        op.setOpacity(0.4)
+        self.ui.label_background.setGraphicsEffect(op)
 
     ### 將每個button連上對應的event
     def setup_control(self):

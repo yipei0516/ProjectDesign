@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from Ui_Plot import Ui_Form
 import MenuController
 from Plot import Plot
+from Utils import image
 
 
 class Plot_controller(QtWidgets.QWidget):
@@ -9,13 +10,14 @@ class Plot_controller(QtWidgets.QWidget):
         super().__init__()
         self.ui = Ui_Form()
         self.ui.setupUi(self)
+        self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
 
-        # qimage = image.show_image_on_label("./image/surgery1.png")
-        # self.ui.label_background.setPixmap(qimage)
-        # self.ui.label_background.lower()
-        # op = QtWidgets.QGraphicsOpacityEffect()
-        # op.setOpacity(0.5)
-        # self.ui.label_background.setGraphicsEffect(op)
+        qimage = image.show_image_on_label("./image/background3.png")
+        self.ui.label_background.setPixmap(qimage)
+        self.ui.label_background.lower()
+        op = QtWidgets.QGraphicsOpacityEffect()
+        op.setOpacity(0.5)
+        self.ui.label_background.setGraphicsEffect(op)
 
         self.plotObject = Plot(ui=self.ui)
         has_FiveDaysData = self.plotObject.judge_fiveDays()

@@ -173,7 +173,7 @@ border-style:outset;
   <widget class="QLabel" name="label_video_name">
    <property name="geometry">
     <rect>
-     <x>500</x>
+     <x>525</x>
      <y>200</y>
      <width>150</width>
      <height>50</height>
@@ -203,7 +203,7 @@ border-style:outset;
   <widget class="QLabel" name="label_folder_image">
    <property name="geometry">
     <rect>
-     <x>490</x>
+     <x>515</x>
      <y>140</y>
      <width>170</width>
      <height>170</height>
@@ -302,24 +302,6 @@ border-style:outset;</string>
     <string> 查看已偵測過資料夾 📝</string>
    </property>
   </widget>
-  <widget class="QListWidget" name="list_widget_done_folder">
-   <property name="geometry">
-    <rect>
-     <x>415</x>
-     <y>150</y>
-     <width>370</width>
-     <height>510</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>微軟正黑體</family>
-     <pointsize>12</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-  </widget>
   <widget class="QPushButton" name="button_back_menu">
    <property name="geometry">
     <rect>
@@ -374,6 +356,24 @@ border-style:outset;</string>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="list_widget_done_folder">
+   <property name="geometry">
+    <rect>
+     <x>415</x>
+     <y>160</y>
+     <width>370</width>
+     <height>510</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>微軟正黑體</family>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
    </property>
   </widget>
   <zorder>label_background</zorder>
