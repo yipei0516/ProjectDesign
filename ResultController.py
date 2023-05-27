@@ -48,7 +48,7 @@ class Result_controller(QtWidgets.QMainWindow):
         ## 次要的小數據
         self.ui.label_surgery_time.setText("總手術時間:   " + str(round(self.oneday_dir.oneday_total_time/60, 1)) + " 分鐘")
         self.ui.label_total_interrupt_time.setText("總中斷時間:   " + str(round(self.oneday_dir.oneday_interrupt_time/60, 1))  + " 分鐘")
-        self.ui.label_interrupt_times.setText("總中斷次數:   " + str(self.oneday_dir.oneday_interrupt_count))
+        self.ui.label_interrupt_times.setText("總中斷次數:   " + str(self.oneday_dir.oneday_interrupt_count) + " 次")
         self.ui.label_ratio.setText("中斷時間佔整個手術時間的比例:   " + str(self.oneday_dir.oneday_ratio) + " %")
         self.ui.label_unit_interrupt_counts.setText("平均每九分鐘的中斷次數:   " + str(self.oneday_dir.oneday_unit_interrupt_counts) + " 次")
 
@@ -118,7 +118,7 @@ class Result_controller(QtWidgets.QMainWindow):
 
         # 更改目前UI的顯示!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         self.ui.label_total_interrupt_time.setText("總中斷時間:   " + str(round(self.oneday_dir.oneday_interrupt_time/60, 1))  + " 分鐘")
-        self.ui.label_interrupt_times.setText("總中斷次數:   " + str(self.oneday_dir.oneday_interrupt_count))
+        self.ui.label_interrupt_times.setText("總中斷次數:   " + str(self.oneday_dir.oneday_interrupt_count) + " 次")
         self.ui.label_ratio.setText("中斷時間佔整個手術時間的比例:   " + str(self.oneday_dir.oneday_ratio) + " %")
         self.ui.label_unit_interrupt_counts.setText("平均每九分鐘的中斷次數:   " + str(self.oneday_dir.oneday_unit_interrupt_counts) + " 次")
         self.ui.label_performance.setText(self.oneday_dir.oneday_performance)

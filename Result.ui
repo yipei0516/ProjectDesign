@@ -114,7 +114,7 @@ border-style:outset;</string>
     </property>
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>340</x>
       <y>116</y>
       <width>90</width>
       <height>90</height>
@@ -288,7 +288,7 @@ border-style:outset;</string>
     </property>
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>340</x>
       <y>201</y>
       <width>90</width>
       <height>90</height>

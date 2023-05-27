@@ -43,8 +43,6 @@ class Menu_controller(QtWidgets.QWidget):
         self.ui.button_choose_video.clicked.connect(self.clicked_choose_video)
         self.ui.button_start_judge.clicked.connect(self.clicked_start_judge)
         self.ui.button_plot_result.clicked.connect(self.clicked_button_plot_result)
-        self.ui.button_manual.clicked.connect(self.show_manual)
-        self.ui.button_manual_2.clicked.connect(self.show_manual)
         self.ui.button_check_folder.clicked.connect(self.check_done_folder)
         self.ui.button_back_menu.clicked.connect(self.back_menu)
         
@@ -149,6 +147,12 @@ class Menu_controller(QtWidgets.QWidget):
     ### Start Judge
     def clicked_start_judge(self):
         finish_judge = True # 是否正確結束judge
+
+        self.ui.button_choose_video.setDisabled(True)
+        self.ui.button_start_judge.setDisabled(True)
+        self.ui.button_plot_result.setDisabled(True)
+        self.ui.button_check_folder.setDisabled(True)
+
         for video in self.oneday_dir.video_file_list:
             ##### Step1. start judge #####
             finish_judge = judge.start_judge(file=video)
@@ -192,6 +196,10 @@ class Menu_controller(QtWidgets.QWidget):
             mbox.setText("資料夾 {0} 未正確結束，請重新選擇資料夾".format(self.oneday_dir.dirname))
             self.ui.button_start_judge.setDisabled(True)
             mbox.exec()
+
+        self.ui.button_choose_video.setDisabled(False)
+        self.ui.button_plot_result.setDisabled(False)
+        self.ui.button_check_folder.setDisabled(False)
 
     def show_result(self):
         self.hide()
